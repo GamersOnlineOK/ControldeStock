@@ -1,0 +1,76 @@
+import React, { useEffect } from 'react';
+import getPendidosCompletos from '../../controller/pedidos/getPedidosCompletos';
+import formatDate from '../../utils/formatDate';
+import {getEstadoColor, getEstadoTexto} from '../../utils/estados';
+
+function PedidosCompletos(props) {
+    const [pedidos, setPedidos] = React.useState([]);
+    useEffect(() => {
+        // pedidos completos
+        async function fetchPedidosCompletos() {
+            const data = await getPendidosCompletos();
+            console.log("Pedidos Completos:", data);
+            setPedidos(data);
+        }
+        fetchPedidosCompletos();
+    }, []);
+
+    return (
+        <>
+        <div>
+            Pedidos Pendientes
+        </div>
+        <div>
+            <div className="recent-orders">
+              <h2>Pedidos Recientes</h2>
+
+              <div className="orders-table-container">
+                <table className="orders-table">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Cliente</th>
+                      <th className='columna-color'>Fecha</th>
+                      <th>Estado</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pedidos.map((pedido, index) => (
+                      
+                      <tr key={pedido._id}>
+                        <td> {index +1}</td>
+                        <td>{pedido.user}</td>
+                        <td>{formatDate(pedido.createdAt)}</td>
+                        <td>
+                          <span 
+                            className="status-badge"
+                            style={{ backgroundColor: getEstadoColor(pedido.status) }}
+                          >
+                            {getEstadoTexto(pedido.status)}
+                          </span>
+                        </td>
+                        <td>
+                          <button className="btn-action view">Ver</button>
+                          <button className="btn-action edit" >Editar</button>
+                          
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {pedidos.length === 0 && (
+                <div className="no-orders">
+                  <p>No hay pedidos registrados.</p>
+                  <button className="btn-primary">Crear Primer Pedido</button>
+                </div>
+              )}
+            </div>
+        </div>
+        </>
+    );
+}
+
+export default PedidosCompletos;
