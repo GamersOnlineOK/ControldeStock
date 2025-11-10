@@ -465,6 +465,38 @@ const syncCompletedOrders = async (req, res) => {
   }
 };
 
+const updateOrder = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const updateData = req.body;
+    console.log(orderId);
+    console.log(updateData);
+    
+    const updatedOrder = await Order.findByIdAndUpdate(
+      orderId,
+      { 
+        $set: { 
+          "items.$[elem].quantity": updateData 
+        } 
+      },
+      { 
+        arrayFilters: [{ "elem.productId": updateData }],
+        new: true 
+      }
+    )
+    if (!updatedOrder) {
+      return res.status(404).json({ error: 'Pedido no encontrado' });
+    }
+    res.json({
+      message: 'Pedido actualizado exitosamente',
+      order: updatedOrder
+    });
+  } catch (error) {
+    console.error('Error al actualizar el pedido:', error);
+    res.status(500).json({ error: 'Error al actualizar el pedido' });
+  }
+};
+
 
 
 export default{
@@ -475,5 +507,6 @@ export default{
   getAllOrders,
   getPedidosPendientes,
   getPedidosCompletados,
-  syncCompletedOrders
+  syncCompletedOrders,
+  updateOrder
 };

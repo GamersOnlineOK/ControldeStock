@@ -27,4 +27,7 @@ router.get('/completados', productController.getPedidosCompletados);
 // Obtener todos los pedidos
 router.get('/all', productController.getAllOrders);
 
+// Actualizar un pedido
+router.put('/:orderId', productController.updateOrder);
+
 export default router;
