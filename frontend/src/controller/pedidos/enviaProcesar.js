@@ -1,11 +1,11 @@
-
+import URL from '../../utils/apiUrl.js';
 
 const postPedidosProcesar = async (pedido) => {
     
     console.log('Enviando pedido para procesar:', pedido);
     
     try {
-        const response = await fetch('http://localhost:3200/api/orders/process-sequential', {
+        const response = await fetch(`${URL}orders/process-sequential`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

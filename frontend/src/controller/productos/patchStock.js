@@ -1,4 +1,4 @@
-
+import URL from '../../utils/apiUrl.js';
 const patchStock = async (id, stockQuantity) =>{
 
     const myHeaders = new Headers();
@@ -19,7 +19,7 @@ const requestOptions = {
   redirect: "follow"
 };
 
-fetch(`http://localhost:3200/api/products/${id}/stock`, requestOptions)
+fetch(`${URL}products/${id}/stock`, requestOptions)
   .then((response) => response.text())
   .then((result) => console.log(result))
   .catch((error) => console.error(error));

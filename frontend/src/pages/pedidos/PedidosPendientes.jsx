@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import getPendidosPendientes from '../../controller/pedidos/getPedidosPendientes';
 import formatDate from '../../utils/formatDate';
 import {getEstadoColor, getEstadoTexto} from '../../utils/estados';
 import enviarPedido from '../../controller/pedidos/enviaProcesar';
 
 function PedidosPendientes(props) {
+  const navigate =  useNavigate();
     const [pedidos, setPedidos] = useState([]);
     useEffect(() => {
         // pedidos pendintes
         async function fetchPedidosPendientes() {
             const data = await getPendidosPendientes();
-            console.log("Pedidos Pendientes:", data);
             setPedidos(data);
         }   
         fetchPedidosPendientes();
@@ -29,7 +30,9 @@ function PedidosPendientes(props) {
           alert('Error al procesar el pedido: ' + error.message);
         }
       }
-
+    const verPedido = (pedido) => {
+      navigate(`/pedidos/ver/${pedido._id}`);
+    }
     return (
         <>
         <div>
@@ -69,7 +72,7 @@ function PedidosPendientes(props) {
                         </td>
                         <td>
                           <button className="btn-action process" onClick={()=>procesarPedido(pedido)}>Procesar</button>
-                          <button className="btn-action view">Ver</button>
+                          <button className="btn-action view" onClick={() =>verPedido(pedido)}>Ver</button>
                           <button className="btn-action edit" >Editar</button>
                           
                         </td>

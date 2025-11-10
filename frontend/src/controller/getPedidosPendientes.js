@@ -1,6 +1,7 @@
+import URL from '../utils/apiUrl.js';
 const getPedidosPendientes = async () => {
     try {
-        const response = await fetch('http://localhost:3200/api/orders/all', {
+        const response = await fetch(`${URL}orders/all`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

@@ -1,6 +1,7 @@
+import URL from '../../utils/apiUrl.js';
 const getPendidosCompletos = async () => {
     try {
-        const response = await fetch('http://localhost:3200/api/orders/completados', {
+        const response = await fetch(`${URL}orders/completados`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

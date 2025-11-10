@@ -1,3 +1,4 @@
+import URL from '../../utils/apiUrl.js';
 const getReceta = (req, res,recetaId) => {
     // Lógica para obtener la receta por ID
     const myHeaders = new Headers();
@@ -9,7 +10,7 @@ const getReceta = (req, res,recetaId) => {
     redirect: "follow"
     };
 
-    return fetch(`http://localhost:3200/api/bom/${recetaId}/explosion`, requestOptions)
+    return fetch(`${URL}bom/${recetaId}/explosion`, requestOptions)
     .then((response) => response.text())
     .then((result) => {return result})
     .catch((error) => console.error(error));

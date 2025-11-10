@@ -1,7 +1,9 @@
-
+import URL from '../../utils/apiUrl.js';
 const getProductos = async (req, res, type, active) => {
+    console.log(URL);
+    
     try {
-        const response = await fetch(`http://localhost:3200/api/products/?type=${type}&active=${active}`, {
+        const response = await fetch(`${URL}products/?type=${type}&active=${active}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

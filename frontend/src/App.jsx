@@ -15,6 +15,7 @@ import CrearReceta from './pages/CrearReceta'
 import PedidosCrear from './pages/pedidos/PedidosCrear';
 import PedidosCompletos from './pages/pedidos/PedidosCompletos';
 import PedidosPendientes from './pages/pedidos/PedidosPendientes';
+import PedidosVer from './pages/pedidos/PedidosVer';
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Route path="/pedidos/crear-pedido" element={<PedidosCrear />} />
         <Route path="/pedidos/pedidos-completados" element={<PedidosCompletos />} />
         <Route path="/pedidos/pedidos-pendientes" element={<PedidosPendientes />} />
+        <Route path="/pedidos/ver/:id" element={<PedidosVer />} />
         {/* ======= OTROS ======== */}
         <Route path="/clientes" element={<Clientes />} />
         <Route path="/reportes" element={<Reportes />} />

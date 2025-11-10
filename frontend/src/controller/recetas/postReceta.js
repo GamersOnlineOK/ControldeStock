@@ -1,3 +1,4 @@
+import URL from '../../utils/apiUrl.js';
 const postReceta = (components, Id) => {
     const myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
@@ -16,7 +17,7 @@ const requestOptions = {
   redirect: "follow"
 };
 
-return fetch(`http://localhost:3200/api/bom/${Id}`, requestOptions)
+return fetch(`${URL}bom/${Id}`, requestOptions)
   .then((response) => response.text())
   .then((result) => {console.log(result);return result})
   .catch((error) => console.error(error));
