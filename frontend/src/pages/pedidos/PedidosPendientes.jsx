@@ -78,8 +78,8 @@ function PedidosPendientes(props) {
                         </td>
                         <td>
                           <button className="btn-action process" onClick={()=>procesarPedido(pedido)}>Procesar</button>
-                          <button className="btn-action view" onClick={() =>verPedido(pedido)}>Ver</button>
-                          <button className="btn-action edit" >Editar</button>
+                          <button className="btn-action view" onClick={() =>verPedido(pedido)}>Ver/Editar</button>
+                          {/* <button className="btn-action edit" >Editar</button> */}
                           
                         </td>
                       </tr>
