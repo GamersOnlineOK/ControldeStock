@@ -280,7 +280,7 @@ const processProductionAuto = async (req, res) => {
     // Obtener BOM del producto
     const bom = await BOM.findOne({ product: product._id }).populate('components.product');
     if (!bom) {
-      return res.status(404).json({ error: 'BOM no encontrado' });
+      return res.status(404).json({ error: 'Sin Receta' });
     }
 
     console.log('BOM encontrado con componentes:', bom.components.length);

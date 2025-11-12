@@ -11,7 +11,6 @@ const ModalAgregarStock = () => {
     cerrarModal
   } = useModalStock();
 
-  // console.log('Modal state:', { showModal, selectedProduct });
 
   if (!showModal) return null;
 

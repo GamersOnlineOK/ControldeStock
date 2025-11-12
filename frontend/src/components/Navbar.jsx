@@ -64,10 +64,12 @@ function Navbar() {
                 className={location.pathname === '/productos/electronica' ? 'active' : ''}
                 >
                 
-                🏷️ Crear Producto</Link>
+                🏷️ Crear Producto
+                </Link>
               </li>
               <li>
-                <Link to="/productos/stock">📋 Stock de Productos</Link>
+                <Link to="/productos/stock">📋 Stock de Productos
+                </Link>
               </li>
             </ul>
         </li>
@@ -87,6 +89,21 @@ function Navbar() {
           >
             📊 Reportes
           </Link>
+        </li>
+        <li className="dropdown">
+          <Link 
+            className={location.pathname.startsWith('/configuracion/') ? 'active' : ''}
+          >
+            🛠️ Configuracion
+          </Link>
+          <ul className="dropdown-menu">
+            <li>
+              <Link to="/configuracion/proveedores">🤝 Proveedores</Link>
+            </li>
+            <li>
+              <Link to="/configuracion/otra-opcion">⚙️ Otra Opción</Link>
+            </li>
+          </ul>
         </li>
       </ul>
     </nav>

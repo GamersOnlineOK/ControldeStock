@@ -1,5 +1,7 @@
 import URL from '../utils/apiUrl.js';
-const getPedidosPendientes = async () => {
+const getPedidos = async () => {
+    console.log(`${URL}orders/all`);
+    
     try {
         const response = await fetch(`${URL}orders/all`, {
             method: 'GET',
@@ -18,4 +20,4 @@ const getPedidosPendientes = async () => {
     }
 };
 
-export default getPedidosPendientes;
+export default getPedidos;

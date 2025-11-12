@@ -4,6 +4,7 @@ import getPendidosPendientes from '../../controller/pedidos/getPedidosPendientes
 import formatDate from '../../utils/formatDate';
 import {getEstadoColor, getEstadoTexto} from '../../utils/estados';
 import enviarPedido from '../../controller/pedidos/enviaProcesar';
+import { useModalNotificaciones } from '../../components/modals/notificaciones/ModalNotificacionesProvider';
 
 function PedidosPendientes(props) {
   const navigate =  useNavigate();
@@ -16,16 +17,21 @@ function PedidosPendientes(props) {
         }   
         fetchPedidosPendientes();
     }, []);
-
+    const  mostrarNotificacion  = useModalNotificaciones();
     const procesarPedido = async (pedido) => {
+        mostrarNotificacion.abrirModal();
         try {
           const resultado = await enviarPedido(pedido);
           if (resultado.success) {
             console.log("Que bien");
             
           }
+          console.log(resultado);
           
-          alert('Pedido procesado: ' + JSON.stringify(resultado));
+          
+          mostrarNotificacion.abrirModal(resultado);
+
+          // alert('Pedido procesado: ' + JSON.stringify(resultado));
         } catch (error) {
           alert('Error al procesar el pedido: ' + error.message);
         }
@@ -88,6 +94,7 @@ function PedidosPendientes(props) {
                   <button className="btn-primary">Crear Primer Pedido</button>
                 </div>
               )}
+              
             </div>
         </div>
         </>

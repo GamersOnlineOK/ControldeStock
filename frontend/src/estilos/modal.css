@@ -16,11 +16,12 @@
 
 /* Contenido del Modal */
 .modal-content {
+  text-align: left;
   background: white;
   border-radius: 12px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   width: 90%;
-  max-width: 500px;
+  max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
   animation: slideUp 0.3s ease-out;
@@ -71,9 +72,14 @@
 }
 
 .modal-body p {
+  padding-inline: 5px;
   margin: 0 0 16px 0;
   font-size: 1rem;
   color: #555;
+}
+.modal-body span {
+  color: #d3471c;
+  font-size: 1rem;
 }
 
 .modal-body strong {

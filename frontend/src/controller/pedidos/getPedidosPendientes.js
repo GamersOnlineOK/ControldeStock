@@ -1,5 +1,6 @@
 import URL from '../../utils/apiUrl.js';
 const getPendidosPendientes = async () => {
+    console.log(URL);
     
     try {
         const response = await fetch(`${URL}orders/pendientes`, {

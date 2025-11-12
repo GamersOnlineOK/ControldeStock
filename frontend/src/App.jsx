@@ -16,6 +16,7 @@ import PedidosCrear from './pages/pedidos/PedidosCrear';
 import PedidosCompletos from './pages/pedidos/PedidosCompletos';
 import PedidosPendientes from './pages/pedidos/PedidosPendientes';
 import PedidosVer from './pages/pedidos/PedidosVer';
+import CrearProveedores from './pages/configuracion/CrearProveedores';
 
 
 function App() {
@@ -31,7 +32,7 @@ function App() {
         {/* ======= PEDIDOS ======== */}
         <Route path="/pedidos/crear-pedido" element={<PedidosCrear />} />
         <Route path="/pedidos/pedidos-completados" element={<PedidosCompletos />} />
-        <Route path="/pedidos/pedidos-pendientes" element={<PedidosPendientes />} />
+        <Route path="/pedidos/pedidos-pendientes" element={<Pedidos />} />
         <Route path="/pedidos/ver/:id" element={<PedidosVer />} />
         {/* ======= OTROS ======== */}
         <Route path="/clientes" element={<Clientes />} />
@@ -39,6 +40,9 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/users" element={<Users />} />
+        {/* ============== CONFIGURACION ============== */}
+        <Route path="/configuracion/proveedores" element={<CrearProveedores />} />
+
         
         <Route path="*" element={
           <div className="page">

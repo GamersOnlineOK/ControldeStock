@@ -14,7 +14,8 @@ app.use(cors({
     'https://simi-pry.com.ar',
     'http://simi-pry.com.ar',
     'https://www.simi-pry.com.ar',
-    'http://www.simi-pry.com.ar'
+    'http://www.simi-pry.com.ar',
+    'http://localhost:3000',
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

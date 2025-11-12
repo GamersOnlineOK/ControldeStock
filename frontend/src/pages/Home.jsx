@@ -1,41 +1,29 @@
 // src/pages/Home.jsx
 import { useState, useEffect } from 'react'
-import getPedidosPendientes from '../controller/getPedidosPendientes';
+import getPedidos from '../controller/getPedidosPendientes';
 import  formatDate  from '../utils/formatDate';
 import enviarPedido from '../controller/pedidos/enviaProcesar';
 import { Link } from 'react-router-dom';
+import URL from '../utils/apiUrl';
+import getIncomingOrders from '../controller/pedidos/getIncomingOrders';
 
 function Home() {
   const [pedidos, setPedidos] = useState([])
   const [loading, setLoading] = useState(true)
-
+  console.log(URL);
+  
   useEffect(() => {
+
     async function fetchPedidosPendientes() {
-      const data = await getPedidosPendientes()
-      setPedidos(data)
-      setLoading(false)
+      const pendingOrders = await getIncomingOrders();
+      if (pendingOrders) {
+        const data = await getPedidos()
+        setPedidos(data)
+        setLoading(false)
+      }
     }
     fetchPedidosPendientes()
-  }, [])
-  const getEstadoColor = (estado) => {
-    switch(estado) {
-      case 'Pendiente': return '#f39c12'
-      case 'en_proceso': return '#3498db'
-      case 'completed': return '#27ae60'
-      case 'cancelado': return '#e74c3c'
-      default: return '#95a5a6'
-    }
-  }
-
-  const getEstadoTexto = (estado) => {
-    switch(estado) {
-      case 'Pendiente': return 'Pendiente'
-      case 'en_proceso': return 'En Proceso'
-      case 'completed': return 'Completado'
-      case 'cancelado': return 'Cancelado'
-      default: return estado
-    }
-  }
+  }, []);
 
   const pedidosPendientes = pedidos.filter(p => p.status === 'Pendiente').length
   const pedidosCompletados = pedidos.filter(p => p.status === 'completed').length
@@ -44,26 +32,11 @@ function Home() {
       sumLineas + (parseFloat(linea.subtotal) || 0), 0
     ) || 0), 0
     );
-  
-  // envia a Procesar pedido
-  const procesarPedido = async (pedido) => {
-    try {
-      const resultado = await enviarPedido(pedido);
-      if (resultado.success) {
-        console.log("Que bien");
-        
-      }
-      
-      alert('Pedido procesado: ' + JSON.stringify(resultado));
-    } catch (error) {
-      alert('Error al procesar el pedido: ' + error.message);
-    }
-  }
 
   if (loading) {
     return (
       <div className="page">
-        <div className="loading">Cargando pedidos...</div>
+        <div className="loading">Actualizando pedidos...</div>
       </div>
     )
   }
@@ -105,58 +78,6 @@ function Home() {
           <p className="stat-number sales">${totalVentas.toFixed(2)}</p>
         </div>
       </div>
-
-      {/* Lista de pedidos recientes */}
-      {/* <div className="recent-orders">
-        <h2>Pedidos Recientes</h2>
-        
-        <div className="orders-table-container">
-          <table className="orders-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Cliente</th>
-                <th>Nota</th>
-                <th className='columna-color'>Fecha</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pedidos.map((pedido, index) => (
-                
-                <tr key={pedido.id}>
-                  <td> {index +1}</td>
-                  <td>{pedido.user}</td>
-                  <td>{pedido.notes}</td>
-                  <td>{formatDate(pedido.createdAt)}</td>
-                  <td>
-                    <span 
-                      className="status-badge"
-                      style={{ backgroundColor: getEstadoColor(pedido.status) }}
-                    >
-                      {getEstadoTexto(pedido.status)}
-                    </span>
-                  </td>
-                  <td>
-                    <button className="btn-action process" onClick={()=>procesarPedido(pedido)}>Procesar</button>
-                    <button className="btn-action view">Ver</button>
-                    <button className="btn-action edit" >Editar</button>
-                    
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {pedidos.length === 0 && (
-          <div className="no-orders">
-            <p>No hay pedidos registrados.</p>
-            <button className="btn-primary">Crear Primer Pedido</button>
-          </div>
-        )}
-      </div> */}
     </div>
   )
 }

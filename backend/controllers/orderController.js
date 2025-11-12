@@ -322,7 +322,7 @@ const processIncomingOrders = async (req, res) => {
 
   try {
     const { data: orders } = await WooCommerce.get('orders', {
-      per_page: 30, // Reducir temporalmente para pruebas
+      per_page: 100, // Reducir temporalmente para pruebas
       _fields: ['id', 'billing', 'line_items', 'date_created','customer_note','status'].join(','),
       status: 'on-hold', // Filtrar por pedidos en espera
       //page: 1,

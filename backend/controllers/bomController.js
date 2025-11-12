@@ -62,7 +62,7 @@ const getBOMExplosion = async (req, res) => {
       .populate('components.product');
 
     if (!bom) {
-      return res.status(404).json({ error: 'BOM no encontrado' });
+      return res.status(404).json({ error: 'Sin Receta' });
     }
 
     // Función recursiva para explosión completa
