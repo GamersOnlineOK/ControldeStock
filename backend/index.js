@@ -15,11 +15,13 @@ app.use(cors({
     'http://simi-pry.com.ar',
     'https://www.simi-pry.com.ar',
     'http://www.simi-pry.com.ar',
-    'http://localhost:3000',
+    'http://localhost:3000'
   ],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH','OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -22,6 +22,8 @@ const ModalAgregarStock = () => {
       console.log('Agregando stock:', selectedProduct._id, stockQuantity);
 
       const id= selectedProduct._id;
+      console.log(id,stockQuantity);
+      
       patchStock(id,stockQuantity );
       
       cerrarModal();

@@ -43,6 +43,8 @@ const updateStock = async (req, res) => {
   try {
     const { productId } = req.params;
     const { quantity, type, reference, notes, user } = req.body;
+    console.log(req.body);
+    
 
     const product = await Product.findById(productId);
     if (!product) {

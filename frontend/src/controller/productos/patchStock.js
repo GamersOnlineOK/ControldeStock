@@ -8,7 +8,7 @@ const raw = JSON.stringify({
   "quantity": parseFloat(stockQuantity),
   "type": "ENTRADA",
   "reference": "Incremento de stock manual",
-  "notes": "Ingres",
+  "notes": "Ingreso",
   "user": "Leonardo"
 });
 
@@ -18,6 +18,7 @@ const requestOptions = {
   body: raw,
   redirect: "follow"
 };
+console.log(`${URL}products/${id}/stock`);
 
 fetch(`${URL}products/${id}/stock`, requestOptions)
   .then((response) => response.text())

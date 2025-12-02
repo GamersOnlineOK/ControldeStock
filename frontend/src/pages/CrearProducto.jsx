@@ -111,7 +111,7 @@ function CrearProducto(props) {
             >
               <option value="">Seleccione una unidad</option>
               <option value="gramos">Gramos</option>
-              <option value="Unidad">Unidad </option>
+              {/* <option value="Unidad">Unidad </option> */}
             </select>
           </div>
           
@@ -153,9 +153,16 @@ function CrearProducto(props) {
               required
             >
               <option value="">Seleccione una categoría</option>
-              <option value="electronica">Tortas</option>
-              <option value="electronica">Facturas</option>
-              
+              <option value="Empanadas">Empanadas</option>
+              <option value="Facturas">Facturas</option>
+              <option value="Galletitas y Otros">Galletitas y Otros</option>
+              <option value="Materia Prima">Materia Prima</option>
+              <option value="Pan Dulce">Pan Dulce</option>
+              <option value="Panaderia">Panaderia</option>
+              <option value="Pasta Frolas">Pasta Frolas</option>
+              <option value="Pasteleria">Pasteleria</option>
+              <option value="Pizzeria">Pizzeria</option>
+              <option value="Tortas y Postres">Tortas y Postres</option>
               
             </select>
             

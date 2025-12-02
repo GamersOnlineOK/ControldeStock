@@ -95,8 +95,8 @@ function TabladeProductos(producto) {
                 <td className="number">{producto.currentStock}</td>
                 <td className="text">{producto.isActive ? 'Activo' : 'Inactivo'}</td>
                 <td>
-                  <button className="btn-action view">Editar</button>
-                  <button className="btn-action delete">Eliminar</button>
+                  {/* <button className="btn-action view">Editar</button>
+                  <button className="btn-action delete">Eliminar</button> */}
                   {producto.type === "MP" ? (
                     <button className="btn-action process" onClick={() => ModalStock.abrirModal(producto)}>Agregar Stock</button>
                     ):(
