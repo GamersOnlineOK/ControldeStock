@@ -42,12 +42,7 @@ function PedidosPendientes(props) {
     return (
         <>
         <div>
-            Pedidos Pendientes
-        </div>
-        <div>
             <div className="recent-orders">
-              <h2>Pedidos Recientes</h2>
-
               <div className="orders-table-container">
                 <table className="orders-table">
                   <thead>

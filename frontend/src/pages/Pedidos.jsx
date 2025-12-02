@@ -6,8 +6,17 @@ import ModalNotificaciones from "../components/modals/notificaciones/ModalNotifi
 function Pedidos() {
   return (
     <div className="page">
-      <h1>Gestión de asd Pedidos</h1>
-      <p>Página para gestionar todos los pedidos del sistema.</p>
+      <div className="page-header">
+        <div>
+          <h1>Gestión de Pedidos</h1>
+          <p>Gestiona los pedidos desde Aca.</p>
+        </div>
+        <div>
+          
+        </div>
+        
+      </div>
+      
       <ModalNotificacionesProvider>
         <PedidosPendientes key='pedidos-pendientes'/>
         <ModalNotificaciones/>
