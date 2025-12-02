@@ -27,9 +27,10 @@ function Home() {
 
   const pedidosPendientes = pedidos.filter(p => p.status === 'Pendiente').length
   const pedidosCompletados = pedidos.filter(p => p.status === 'completed').length
+  
   const totalVentas = pedidos.reduce((sum, pedido) => 
     sum + (pedido.items?.reduce((sumLineas, linea) => 
-      sumLineas + (parseFloat(linea.subtotal) || 0), 0
+      sumLineas + ((parseFloat(linea.subtotal)*linea.quantity )|| 0), 0
     ) || 0), 0
     );
 
