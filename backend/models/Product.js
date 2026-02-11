@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema({
   currentStock: {    type: Number,    default: 0  },
   cost: {    type: Number,    default: 0  },
   price: {    type: Number,    default: 0  },
+  category: {    type: mongoose.Schema.Types.ObjectId,    ref: 'Category',    required: true  },
   isActive: {    type: Boolean,    default: true  }
 }, {
   timestamps: true

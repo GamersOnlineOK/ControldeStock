@@ -5,5 +5,6 @@ import productionController from '../controllers/productionController.js';
 
 router.post('/check-stock-advanced', productionController.checkStockAdvanced);
 router.post('/process', productionController.processProductionAuto);
+router.post('/process-mpe', productionController.processProductionMPE);
 
 export default router;

@@ -465,28 +465,41 @@ const syncCompletedOrders = async (req, res) => {
   }
 };
 
-const updateOrder = async (req, res) => {
-  try {
+const updateOrder = async (req, res) => {try {
     const { orderId } = req.params;
-    const updateData = req.body;
-    console.log(orderId);
-    console.log(updateData);
+    const { items } = req.body;
+    
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ error: 'Se requiere un array de items válido' });
+    }
+    
+    console.log('Order ID:', orderId);
+    console.log('Items to update:', items);
+    
+    // Crear arrayFilters dinámicamente
+    const arrayFilters = items.map(item => ({
+      [`elem${item.productId}.productId`]: item.productId
+    }));
+    
+    // Crear update object dinámicamente
+    const updateObject = {};
+    items.forEach(item => {
+      updateObject[`items.$[elem${item.productId}].quantity`] = item.quantity;
+    });
     
     const updatedOrder = await Order.findByIdAndUpdate(
       orderId,
+      { $set: updateObject },
       { 
-        $set: { 
-          "items.$[elem].quantity": updateData 
-        } 
-      },
-      { 
-        arrayFilters: [{ "elem.productId": updateData }],
+        arrayFilters: arrayFilters,
         new: true 
       }
-    )
+    );
+    
     if (!updatedOrder) {
       return res.status(404).json({ error: 'Pedido no encontrado' });
     }
+    
     res.json({
       message: 'Pedido actualizado exitosamente',
       order: updatedOrder

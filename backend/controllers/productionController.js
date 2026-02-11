@@ -434,7 +434,179 @@ const processProductionAuto = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+//Esta parte se encarga de descontar de stock al momento de enviar a produccir, el producto final 
+//o bien la materia prima elaborada.
+const processProductionMPE = async (req, res) => {
+  try {
+    const { productId, quantity, user, notes } = req.body;
 
+  
+    console.log('Iniciando producción automática para:', productId, 'Cantidad:', quantity);
+
+    const product = await Product.findOne({ _id: productId });
+    // const product = await Product.findById(  productId );
+    console.log('Producto encontrado:', product);
+    if (!product || !['PF', 'MPE'].includes(product.type)) {
+      return res.status(400).json({ error: 'Producto no válido para producción' });
+    }
+
+    // Obtener BOM del producto
+    const bom = await BOM.findOne({ product: product._id }).populate('components.product');
+    if (!bom) {
+      return res.status(404).json({ error: 'Sin Receta' });
+    }
+
+    console.log('BOM encontrado con componentes:', bom.components.length);
+
+    // VERIFICAR STOCK DE COMPONENTES DIRECTOS
+    const { canUseDirect, missingComponents } = await checkDirectComponentsStock(bom, quantity);
+    
+    let productionMode = '';
+    let consumptionMovements = [];
+
+    if (canUseDirect) {
+      console.log('Usando componentes DIRECTOS (MPE + MP)');
+      productionMode = 'DIRECTO';
+      
+      // Consumir componentes directos
+      const movements = await consumeDirectComponents(bom, quantity, product, user);
+      consumptionMovements = movements;
+
+    } else {
+      console.log('No hay stock suficiente de componentes directos');
+      
+      // 🚨 MODIFICACIÓN CLAVE: Verificar específicamente qué falta
+      const missingMPE = missingComponents.filter(mc => 
+        mc.product.type === 'MPE' && mc.available < mc.required
+      );
+
+      const missingMP = missingComponents.filter(mc => 
+        mc.product.type === 'MP' && mc.available < mc.required
+      );
+
+      // 🚨 SI FALTAN MPE, CANCELAR DIRECTAMENTE - SIN EXPLOSIÓN
+      if (missingMPE.length > 0) {
+        console.log('Faltan MPE, cancelando producción:', missingMPE.map(m => m.product.name));
+        
+        return res.status(400).json({ 
+          error: 'Stock insuficiente de productos semi-elaborados (MPE)',
+          details: {
+            message: 'No se puede proceder con la producción por falta de MPE',
+            missingMPE: missingMPE.map(m => ({
+              product: m.product.name,
+              code: m.product.code,
+              required: m.required,
+              available: m.available,
+              missing: m.required - m.available
+            })),
+            instruction: 'Produzca primero los MPE faltantes antes de continuar'
+          }
+        });
+      }
+
+      // 🚨 SOLO PERMITIR SI SOLO FALTAN MP (materia prima directa)
+      if (missingMP.length > 0) {
+        console.log('Faltan solo MP, procediendo con explosión:', missingMP.map(m => m.product.name));
+        
+        // Obtener todos los componentes con explosión
+        const allComponents = await explodeComponents(product._id, quantity);
+        const consolidatedComponents = consolidateComponents(allComponents);
+        
+        console.log('Componentes después de explosión:', consolidatedComponents.length);
+
+        // Verificar stock de componentes explotados (solo MP)
+        for (let component of consolidatedComponents) {
+          if (component.product.currentStock < component.quantity) {
+            return res.status(400).json({ 
+              error: `Stock insuficiente incluso con explosión: ${component.product.name}`,
+              details: {
+                product: component.product.name,
+                required: component.quantity,
+                available: component.product.currentStock,
+                missing: component.quantity - component.product.currentStock
+              }
+            });
+          }
+        }
+
+        // CONSUMIR COMPONENTES EXPLOTADOS (solo MP)
+        for (let component of consolidatedComponents) {
+          const previousStock = component.product.currentStock;
+          component.product.currentStock -= component.quantity;
+          await component.product.save();
+
+          const movement = await StockMovement.create({
+            product: component.product._id,
+            type: 'CONSUMO',
+            quantity: component.quantity,
+            reference: `PROD-${product.code}-${Date.now()}`,
+            notes: `Consumo por explosión para producción de ${product.name}`,
+            previousStock: previousStock,
+            newStock: component.product.currentStock,
+            user: user
+          });
+
+          consumptionMovements.push({
+            movement,
+            component: {
+              product: component.product,
+              quantity: component.quantity
+            }
+          });
+        }
+
+        productionMode = 'EXPLOSION';
+      } else {
+        // Caso inesperado - no debería llegar aquí
+        return res.status(400).json({ 
+          error: 'Error inesperado en verificación de stock',
+          missingComponents: missingComponents
+        });
+      }
+    }
+
+    // PRODUCIR EL PRODUCTO FINAL (solo si llegamos aquí)
+    const previousStock = product.currentStock;
+    product.currentStock += quantity;
+    await product.save();
+
+    const productionMovement = await StockMovement.create({
+      product: product._id,
+      type: 'PRODUCCION',
+      quantity: quantity,
+      reference: `PROD-${product.code}-${Date.now()}`,
+      notes: `${notes || 'Producción'} (Modo: ${productionMode})`,
+      previousStock: previousStock,
+      newStock: product.currentStock,
+      user: user
+    });
+
+    res.json({
+      message: 'Producción completada exitosamente',
+      product: {
+        _id: product._id,
+        code: product.code,
+        name: product.name,
+        newStock: product.currentStock
+      },
+      productionMode: productionMode,
+      componentsConsumed: consumptionMovements.map(cm => ({
+        product: cm.component.product.code,
+        name: cm.component.product.name,
+        type: cm.component.product.type,
+        quantity: cm.component.quantity
+      })),
+      movements: {
+        consumption: consumptionMovements.map(cm => cm.movement),
+        production: productionMovement
+      }
+    });
+
+  } catch (error) {
+    console.error('Error en processProductionAuto:', error);
+    res.status(400).json({ error: error.message });
+  }
+};
 // Verificar stock con ambos modos
 const checkStockAdvanced = async (req, res) => {
   try {
@@ -500,5 +672,6 @@ const checkStockAdvanced = async (req, res) => {
 
 export default{
     checkStockAdvanced,
-    processProductionAuto
+    processProductionAuto,
+    processProductionMPE
 };

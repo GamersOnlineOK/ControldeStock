@@ -6,7 +6,10 @@ import productRoutes from './productos.js';
 import bomRoutes from './bom.js';
 import productionRoutes from './production.js';
 import orderRoutes from './orders.js';
+import configRoutes from './config.js';
 
+
+router.use('/config', configRoutes);
 router.use('/products', productRoutes);
 router.use('/bom', bomRoutes);
 router.use('/production', productionRoutes);
