@@ -17,6 +17,7 @@ import PedidosCompletos from './pages/pedidos/PedidosCompletos';
 import PedidosPendientes from './pages/pedidos/PedidosPendientes';
 import PedidosVer from './pages/pedidos/PedidosVer';
 import CrearProveedores from './pages/configuracion/CrearProveedores';
+import CreaCategorias from './pages/configuracion/creaCategorias';
 
 
 function App() {
@@ -42,6 +43,8 @@ function App() {
         <Route path="/users" element={<Users />} />
         {/* ============== CONFIGURACION ============== */}
         <Route path="/configuracion/proveedores" element={<CrearProveedores />} />
+        <Route path="/configuracion/categorias" element={<CreaCategorias />} />
+
 
         
         <Route path="*" element={

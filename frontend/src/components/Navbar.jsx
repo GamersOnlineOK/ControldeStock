@@ -101,7 +101,7 @@ function Navbar() {
               <Link to="/configuracion/proveedores">🤝 Proveedores</Link>
             </li>
             <li>
-              <Link to="/configuracion/otra-opcion">⚙️ Otra Opción</Link>
+              <Link to="/configuracion/categorias">⚙️ Crear Categoria</Link>
             </li>
           </ul>
         </li>

@@ -13,7 +13,14 @@ const postProducto = (producto) =>{
     };
 
     fetch(`${URL}products/`, requestOptions)
-    .then((response) => response.text())
+    .then((response) => {
+        return {
+            success: response.ok,
+            status: response.status,
+            statusText: response.statusText,
+            data: response.json()
+        }
+    })
     .then((result) => console.log(result))
     .catch((error) => console.error(error));
 }

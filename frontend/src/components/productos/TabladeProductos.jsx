@@ -100,7 +100,11 @@ function TabladeProductos(producto) {
                   {producto.type === "MP" ? (
                     <button className="btn-action process" onClick={() => ModalStock.abrirModal(producto)}>Agregar Stock</button>
                     ):(
+                      <>
+                      <button className="btn-action process" onClick={() => ModalStock.abrirModal(producto)}>Agregar Stock</button>
                       <button className="btn-action process" onClick={() => verReceta(producto)}>Crear Receta</button>
+                      </>
+
                       )}
                   
                 </td>

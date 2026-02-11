@@ -1,10 +1,20 @@
 import React, { useEffect, useState } from 'react';
+import URL from '../utils/apiUrl';
 import '../estilos/formularios.css';
 import postProducto from '../controller/productos/postProducto';
 
 function CrearProducto(props) {
 
-    
+   const [categorias, setCategorias] = useState([]);
+   const [message, setMessage] = useState('');
+
+    useEffect(() => {
+        fetch(`${URL}config/list`)
+            .then(
+                response => response.json())
+            .then(data => setCategorias(data))
+            .catch(error => console.error('Error fetching categories:', error));
+        }, []);
     
   const [formData, setFormData] = useState({
     code: '',
@@ -13,7 +23,7 @@ function CrearProducto(props) {
     unit: '',
     minStock: '',
     currentStock: '',
-    categoria: '',
+    category: '',
     price: '',
     precioVenta: ''
   });
@@ -29,9 +39,15 @@ function CrearProducto(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Datos del producto:', formData);
-    postProducto(formData)
+    const data = postProducto(formData);
+    setMessage(data);
     // Aquí iría la lógica para enviar los datos al servidor
-    alert('Producto guardado correctamente');
+    if (data.success) {
+      alert('Producto guardado correctamente :' + `${data.data.name}`);
+    }else {
+      alert('Error al guardar el producto: ' + data.statusText);
+    }
+    
   };
 
   const handleReset = () => {
@@ -53,6 +69,7 @@ function CrearProducto(props) {
       <div className="form-header">
         <h1>Cargar Producto</h1>
         <p>Complete todos los campos para agregar un nuevo producto al inventario</p>
+        {message && <p className="message">{message}</p>}
       </div>
       
       <form className="product-form" onSubmit={handleSubmit}>
@@ -144,26 +161,19 @@ function CrearProducto(props) {
           </div>
           
           <div className="form-group">
-            <label htmlFor="categoria">Categoría</label>
+            <label htmlFor="category">Categoría</label>
             <select
-              id="categoria"
-              name="categoria"
-              value={formData.categoria}
+              id="category"
+              name="category"
+              value={formData.category}
               onChange={handleChange}
               required
             >
-              <option value="">Seleccione una categoría</option>
-              <option value="Empanadas">Empanadas</option>
-              <option value="Facturas">Facturas</option>
-              <option value="Galletitas y Otros">Galletitas y Otros</option>
-              <option value="Materia Prima">Materia Prima</option>
-              <option value="Pan Dulce">Pan Dulce</option>
-              <option value="Panaderia">Panaderia</option>
-              <option value="Pasta Frolas">Pasta Frolas</option>
-              <option value="Pasteleria">Pasteleria</option>
-              <option value="Pizzeria">Pizzeria</option>
-              <option value="Tortas y Postres">Tortas y Postres</option>
-              
+              {categorias.map((categoria) => (
+                <option key={categoria._id} value={categoria._id}>
+                  {categoria.name}
+                </option>
+              ))}              
             </select>
             
           </div>
@@ -181,7 +191,6 @@ function CrearProducto(props) {
                   min="0"
                   step="0.01"
                   placeholder="Precio de Compra"
-                  required
                 />
               </div>
               <div className="price-input">
@@ -194,7 +203,6 @@ function CrearProducto(props) {
                   min="0"
                   step="0.01"
                   placeholder="Precio de Venta"
-                  required
                 />
               </div>
             </div>
