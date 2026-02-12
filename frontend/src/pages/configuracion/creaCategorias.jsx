@@ -43,25 +43,23 @@ function CreaCategorias(props) {
 
     return (
         <>
-        <div className="form-container">
-            <div >
-                <div className="form-header">
-                    <form onSubmit={crearCategoria}>
-                        <label htmlFor="nombre">Nombre de la Categoria:</label>
-                        <input type="text" id="nombre" name="nombre" required />
-                        <br />
-                        <label htmlFor="descripcion">Descripción:</label>
-                        <input type="text" id="descripcion" name="descripcion" required />
-                        <br />
-                        <button className="btn btn-primary" type="submit">Crear Categoria</button>
-                    </form>
+        <div className="receta-container">
+                <div className="receta--sub--container">                
+                        <form onSubmit={crearCategoria} >
+                            <div className="receta--group--item">
+                                <label htmlFor="nombre">Nombre de la Categoria:</label>
+                                <input type="text" id="nombre" name="nombre" required />
+                            </div> 
+                            <div className="receta--group--item">                            
+                                <label htmlFor="descripcion">Descripción:</label>
+                                <input type="text" id="descripcion" name="descripcion" required />
+                            </div>
+                            <div className="receta--group--item">
+                                <button className="btn btn-primary" type="submit">Crear Categoria</button>
+                            </div>                        
+                        </form>                
                 </div>
-            </div>
-            <div>
-                Aca se listan las categorias
-            </div>
-        </div>
-        <div style={{ width: '50%', margin: '0 auto' }}>
+        <div className="receta--sub--container">
             <h2>Listado de Categorias</h2>
             {/* aca va el listado de categorias */}
             <table  className="ingredients-table">
@@ -82,7 +80,7 @@ function CreaCategorias(props) {
                 ))}
                 </table>
         </div>
-        
+        </div>
         </>
     );
 }
