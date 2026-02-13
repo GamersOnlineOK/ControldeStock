@@ -168,10 +168,13 @@ function CrearProducto(props) {
               value={formData.category}
               onChange={handleChange}
               required
-            >
+            > 
+            <option>
+              Selecciona una Categoria
+            </option>
               {categorias.map((categoria) => (
                 <option key={categoria._id} value={categoria._id}>
-                  {categoria.name}
+                  {categoria.name} 
                 </option>
               ))}              
             </select>

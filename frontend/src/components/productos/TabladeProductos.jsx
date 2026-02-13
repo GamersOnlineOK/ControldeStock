@@ -25,9 +25,7 @@ function TabladeProductos(producto) {
     
     const ModalStock = useModalStock();
 
-    const handleSearch = (e) => {
-        setSearchTerm(e.target.value);
-      }
+    const handleSearch = (e) => { setSearchTerm(e.target.value); }
 
     const verReceta = (producto) =>{
       console.log(producto);
