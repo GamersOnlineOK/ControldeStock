@@ -5,8 +5,20 @@ import StockMovement from '../models/StockMovement.js';
 
 // Crear producto
 const createProduct = async (req, res) => {
+  const { code, name, type, unit, minStock, currentStock, category, cost, price } = req.body;
+
   try {
-    const product = new Product(req.body);
+    const product = new Product({
+      code,
+      name,
+      type,
+      unit,
+      minStock:minStock * 1000,
+      currentStock:currentStock * 1000,
+      category,
+      cost,
+      price
+    });
     await product.save();
     res.status(201).json(product);
   } catch (error) {
