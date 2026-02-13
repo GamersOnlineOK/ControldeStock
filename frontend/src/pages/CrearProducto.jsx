@@ -25,7 +25,7 @@ function CrearProducto(props) {
     currentStock: '',
     category: '',
     price: '',
-    precioVenta: ''
+    cost: ''
   });
 
   const handleChange = (e) => {
@@ -116,35 +116,35 @@ function CrearProducto(props) {
                 required
                 />
             </div>
+
+            <div className="form-group">
+              <label htmlFor="unit">Unidad de Medida</label>
+              <select
+                id="unit"
+                name="unit"
+                value={formData.unit}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Seleccione una unidad</option>
+                <option value="gramos">Gramos</option>
+                {/* <option value="Unidad">Unidad </option> */}
+              </select>
+            </div>
           
-          <div className="form-group">
-            <label htmlFor="unit">Unidad de Medida</label>
-            <select
-              id="unit"
-              name="unit"
-              value={formData.unit}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Seleccione una unidad</option>
-              <option value="gramos">Gramos</option>
-              {/* <option value="Unidad">Unidad </option> */}
-            </select>
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="minStock">Stock Mínimo</label>
-            <input
-              type="number"
-              id="minStock"
-              name="minStock"
-              value={formData.minStock}
-              onChange={handleChange}
-              min="0"
-              placeholder="Ej: 10"
-              required
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="minStock">Stock Mínimo</label>
+              <input
+                type="number"
+                id="minStock"
+                name="minStock"
+                value={formData.minStock}
+                onChange={handleChange}
+                min="0"
+                placeholder="Ej: 10"
+                required
+              />
+            </div>
           
           <div className="form-group">
             <label htmlFor="currentStock">Stock Actual</label>
@@ -187,9 +187,9 @@ function CrearProducto(props) {
               <div className="price-input">
                 <input
                   type="number"
-                  id="price"
-                  name="price"
-                  value={formData.precioCompra}
+                  id="cost"
+                  name="cost"
+                  value={formData.cost}
                   onChange={handleChange}
                   min="0"
                   step="0.01"
@@ -199,9 +199,9 @@ function CrearProducto(props) {
               <div className="price-input">
                 <input
                   type="number"
-                  id="precioVenta"
-                  name="precioVenta"
-                  value={formData.precioVenta}
+                  id="price"
+                  name="price"
+                  value={formData.price}
                   onChange={handleChange}
                   min="0"
                   step="0.01"
