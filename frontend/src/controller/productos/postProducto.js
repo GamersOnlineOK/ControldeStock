@@ -12,13 +12,13 @@ const postProducto = (producto) =>{
     redirect: "follow"
     };
 
-    fetch(`${URL}products/`, requestOptions)
-    .then((response) => {
+    return fetch(`${URL}products/`, requestOptions)
+    .then(async (response) => {
         return {
             success: response.ok,
             status: response.status,
             statusText: response.statusText,
-            data: response.json()
+            data: await response.json()
         }
     })
     .then((result) => console.log(result))

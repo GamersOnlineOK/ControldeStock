@@ -137,6 +137,12 @@ input:focus, select:focus {
 .btn-secondary:hover {
   background-color: #dee2e6;
 }
+.message_success {
+    text-align: center!important;
+    font-size: 1.2em!important;
+    color: rgb(4, 143, 4)!important;
+    margin-top: 20px!important;
+}
 
 @media (max-width: 768px) {
   .form-grid {

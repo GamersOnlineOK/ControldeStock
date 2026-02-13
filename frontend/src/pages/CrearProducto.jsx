@@ -36,16 +36,25 @@ function CrearProducto(props) {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Datos del producto:', formData);
-    const data = postProducto(formData);
-    setMessage(data);
-    // Aquí iría la lógica para enviar los datos al servidor
-    if (data.success) {
-      alert('Producto guardado correctamente :' + `${data.data.name}`);
-    }else {
-      alert('Error al guardar el producto: ' + data.statusText);
+  const handleSubmit = async (e) => {
+    e.preventDefault(); 
+    try {
+        const data = await postProducto(formData);
+        setMessage('Producto creado exitosamente: ' + `${formData.name}`);
+        setFormData({
+          code: '', 
+          name: '',
+          type: 'PF',
+          unit: '', 
+          minStock: '',
+          currentStock: '',
+          category: '',
+          price: '',
+          cost: ''
+        }); 
+        console.log('Producto creado:', data);
+    } catch (error) {
+        console.error('Error al crear producto:', error);
     }
     
   };
@@ -69,7 +78,7 @@ function CrearProducto(props) {
       <div className="form-header">
         <h1>Cargar Producto</h1>
         <p>Complete todos los campos para agregar un nuevo producto al inventario</p>
-        {message && <p className="message">{message}</p>}
+        {message && <p className="message_success">{message}</p>}
       </div>
       
       <form className="product-form" onSubmit={handleSubmit}>
