@@ -6,7 +6,7 @@ import Product from '../models/Product.js';
 const createOrUpdateBOM = async (req, res) => {
   try {
     const { productId } = req.params;
-    const { components, version } = req.body;
+    const { components, version, baseQuantity } = req.body;
     console.log(components);
     
     // Verificar que el producto existe y es PF o MPE
@@ -42,8 +42,9 @@ const createOrUpdateBOM = async (req, res) => {
 
     const bom = await BOM.findOneAndUpdate(
       { product: productId },
-      { components, version },
+      { components, version, baseQuantity },
       { new: true, upsert: true }
+
     ).populate('components.product');
 
     res.json(bom);
@@ -80,7 +81,8 @@ const getBOMExplosion = async (req, res) => {
           quantity: quantity,
           level: level
         },
-        components: []
+        components: [],
+        baseQuantity: productBOM ? productBOM.baseQuantity : 0
       };
 
       if (productBOM) {

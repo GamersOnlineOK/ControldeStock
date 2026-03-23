@@ -34,6 +34,11 @@ const bomSchema = new mongoose.Schema({
   isActive: {
     type: Boolean,
     default: true
+  },
+  baseQuantity: {
+    type: Number,
+    required: true,
+    min: 1
   }
 }, {
   timestamps: true

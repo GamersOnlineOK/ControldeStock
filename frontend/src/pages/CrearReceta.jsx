@@ -16,7 +16,8 @@ function CrearReceta(props) {
     const [producto, setProducto] = useState([])
     const [type, setType ] = useState('MP');
     const [componente, setComponente] = useState('');
-    const [componentes,setComponentes] = useState([])
+    const [componentes,setComponentes] = useState([]);
+    const [base, setBase] = useState(0);
     const active = true;
 
     useEffect(()=>{
@@ -49,15 +50,15 @@ function CrearReceta(props) {
                 const res = await getReceta(null,null,Id);
                 const rs = JSON.parse(res);
                 console.log(rs);
+                setBase(rs.baseQuantity);
                 
                 const CRs= rs.components.map(component => ({
                         ingrediente: component.product._id, // Solo el ID
                         ing:{name:component.product.name} ,
-                        cantidad: component.product.quantity,
+                        cantidad: component.product.quantity*rs.baseQuantity, // Cantidad total para la base
                         waste: component.waste || 0 // Por si no viene waste
                     }))
                 ;
-                console.log(CRs);
                 setComponentes(CRs)
                 
             } catch (error) {
@@ -137,13 +138,14 @@ function CrearReceta(props) {
             componentes.map(c => {
                 component.push({
                     product: c.ingrediente,
-                    quantity: c.cantidad
+                    quantity: c.cantidad/base
                 })
             })
+            
 
         }
         receta()
-        postReceta(component, Id).then(respuesta => {
+        postReceta(component, Id, base).then(respuesta => {
                 console.log('Respuesta capturada:', respuesta);
                 alert('Receta actualizada con exito');
             })
@@ -159,7 +161,10 @@ function CrearReceta(props) {
         enviarReceta();
         
     }    
-    console.log(componentes);
+    const handleBaseChange = (e) => {
+        setBase(e.target.value);
+        
+    }
     
     
     return (
@@ -229,10 +234,12 @@ function CrearReceta(props) {
             </div>
             {/* Listado de Ingredientes cargados para enviar receta */}
             <div className='receta--sub--container'>
+                
                                     {
                                         componentes.length > 0 ? (
                                         <>
                                             <h2>Listado de Ingredientes</h2>
+                                            <div> base: <input type="number" name="base" onChange={handleBaseChange} defaultValue={base}></input> </div>
                                             <table className="ingredients-table">
                                                 <thead>
                                                     <tr>

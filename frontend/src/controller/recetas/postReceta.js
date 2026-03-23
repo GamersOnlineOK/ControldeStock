@@ -1,5 +1,5 @@
 import URL from '../../utils/apiUrl.js';
-const postReceta = (components, Id) => {
+const postReceta = (components, Id, base) => {
     const myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 
@@ -7,7 +7,8 @@ const raw = JSON.stringify({
   "components": 
     components
   ,
-  "version": "1.0"
+  "version": "1.0",
+  "baseQuantity": base
 });
 
 const requestOptions = {

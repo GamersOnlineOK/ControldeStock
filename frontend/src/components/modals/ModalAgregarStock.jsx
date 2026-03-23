@@ -22,10 +22,30 @@ const ModalAgregarStock = () => {
       console.log('Agregando stock:', selectedProduct._id, stockQuantity);
 
       const id= selectedProduct._id;
-      console.log(id,stockQuantity);
+      const type = selectedProduct.type;
+      console.log(id,stockQuantity,type);
+
+      const patch = patchStock(id,stockQuantity,type );
+      console.log(patch);
       
-      patchStock(id,stockQuantity );
+      try {
+        const response = patch.then(res => {
+          console.log('Respuesta del servidor:', res);
+          if (res.ok) {
+            alert('Stock agregado exitosamente');
+          } else {
+            alert('Error al agregar stock');
+          }
+        }).catch(error => {
+          console.error('Error en la solicitud:', error);
+          alert('Error al agregar stock');
+        });
+      } catch (error) {
+        console.error(error);
+        alert('Error al agregar stock');
+      }
       
+
       cerrarModal();
     }
   };

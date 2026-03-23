@@ -7,6 +7,7 @@ router.post('/', productController.createProduct);
 router.get('/', productController.getProducts);
 router.get('/all', productController.getAllProducts);
 router.patch('/:productId/stock', productController.updateStock);
+router.patch('/:productId/stock/elaborada', productController.updateStockElaborada);
 router.get('/syncronizar', productosUpdate.sincronizarProductosWoocommerce);
 
 export default router;
