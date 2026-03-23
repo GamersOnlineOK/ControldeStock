@@ -13,8 +13,8 @@ const createProduct = async (req, res) => {
       name,
       type,
       unit,
-      minStock:minStock * 1000,
-      currentStock:currentStock * 1000,
+      minStock:minStock / 1000,
+      currentStock:currentStock / 1000,
       category,
       cost,
       price
