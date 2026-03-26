@@ -18,6 +18,7 @@ import PedidosPendientes from './pages/pedidos/PedidosPendientes';
 import PedidosVer from './pages/pedidos/PedidosVer';
 import CrearProveedores from './pages/configuracion/CrearProveedores';
 import CreaCategorias from './pages/configuracion/creaCategorias';
+import EditarProducto from './pages/productos/editarProducto';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
         <Route path="/productos/stock" element={<Productos />} />
         <Route path="/productos/crear-producto" element={<CrearProducto />} />
         <Route path="/productos/recetas/:Id" element={<CrearReceta />} />
+        {/* <Route path="/productos/editar/:id" element={<EditarProducto />} /> */}
         {/* ======= PEDIDOS ======== */}
         <Route path="/pedidos/crear-pedido" element={<PedidosCrear />} />
         <Route path="/pedidos/pedidos-completados" element={<PedidosCompletos />} />

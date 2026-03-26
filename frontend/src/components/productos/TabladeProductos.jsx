@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useModalStock } from '../modals/modalProvider';
 import getProductos from '../../controller/productos/getProductos';
+import redondeo from '../../utils/redondeo';
 
 function TabladeProductos(producto) {   
 
@@ -28,9 +29,10 @@ function TabladeProductos(producto) {
     const handleSearch = (e) => { setSearchTerm(e.target.value); }
 
     const verReceta = (producto) =>{
-      console.log(producto);
       navigate(`/productos/recetas/${producto._id}`)
-      
+    }
+    const verEditar = (producto) =>{
+      navigate(`/productos/editar/${producto._id}`)
     }
     // Función de filtrado combinado
     const filteredProducts = data.filter(producto => {
@@ -77,7 +79,6 @@ function TabladeProductos(producto) {
               <th>ID</th>
               <th>Nombre</th>
               <th>Unidad</th>
-              <th>Precio</th>
               <th>Stock</th>
               <th>Activo</th>
               <th>Acciones</th>
@@ -89,8 +90,9 @@ function TabladeProductos(producto) {
                 <td className="text">{index +1}</td>
                 <td className="text">{producto.name}</td>
                 <td className="text">{producto.unit}</td>
-                <td className="number">$ {producto.price}</td>
-                <td className="number">{producto.currentStock}</td>
+                {/* <td className="number">$ {producto.cost}</td>
+                <td className="number">$ {producto.price}</td> */}
+                <td className="number">{redondeo(producto.currentStock)}</td>
                 <td className="text">{producto.isActive ? 'Activo' : 'Inactivo'}</td>
                 <td>
                   {/* <button className="btn-action view">Editar</button>
@@ -100,7 +102,9 @@ function TabladeProductos(producto) {
                     ):(
                       <>
                       <button className="btn-action process" onClick={() => ModalStock.abrirModal(producto)}>Agregar Stock</button>
-                      <button className="btn-action process" onClick={() => verReceta(producto)}>Crear Receta</button>
+                      <button className="btn-action view" onClick={() => verReceta(producto)}>Crear Receta</button>
+                      <button className="btn-action edit" onClick={() => verEditar(producto)}>Editar</button>
+                      <button className="btn-action delete " onClick={() => verReceta(producto)}>Deshabilitar</button>
                       </>
 
                       )}

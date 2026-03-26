@@ -1,6 +1,8 @@
 import { useModalStock } from "./modalProvider";
 import '../../estilos/modal.css'
 import patchStock from "../../controller/productos/patchStock";
+import { useState } from "react";
+import { set } from "mongoose";
 
 const ModalAgregarStock = () => {
   const {
@@ -11,42 +13,25 @@ const ModalAgregarStock = () => {
     cerrarModal
   } = useModalStock();
 
+  const [error, setError] = useState('');
 
   if (!showModal) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (stockQuantity && selectedProduct) {
-      // Aquí llamas a tu función original para agregar stock
-      // agregarStock(selectedProduct._id, stockQuantity);
-      console.log('Agregando stock:', selectedProduct._id, stockQuantity);
 
-      const id= selectedProduct._id;
+      const id = selectedProduct._id;
       const type = selectedProduct.type;
-      console.log(id,stockQuantity,type);
 
-      const patch = patchStock(id,stockQuantity,type );
-      console.log(patch);
-      
-      try {
-        const response = patch.then(res => {
-          console.log('Respuesta del servidor:', res);
-          if (res.ok) {
-            alert('Stock agregado exitosamente');
-          } else {
-            alert('Error al agregar stock');
-          }
-        }).catch(error => {
-          console.error('Error en la solicitud:', error);
-          alert('Error al agregar stock');
-        });
-      } catch (error) {
-        console.error(error);
-        alert('Error al agregar stock');
-      }
-      
+      const patch = await patchStock(id, stockQuantity, type);
 
-      cerrarModal();
+      if (patch.error) {
+        setError(patch.error);
+      } else {
+        setError('');
+          cerrarModal();
+        }
     }
   };
 
@@ -81,7 +66,7 @@ const ModalAgregarStock = () => {
             </div>
             
             <div className="modal-actions">
-              <button type="button" className="btn-cancel" onClick={cerrarModal}>
+              <button type="button" className="btn-cancel" onClick={() => { cerrarModal(); setError(''); }}>
                 Cancelar
               </button>
               <button type="submit" className="btn-confirm">
@@ -89,6 +74,9 @@ const ModalAgregarStock = () => {
               </button>
             </div>
           </form>
+          <div>
+            {error && <p className="error-message">{error}</p>}
+          </div>
         </div>
       </div>
     </div>

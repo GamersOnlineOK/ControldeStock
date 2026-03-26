@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import '../estilos/recetas.css';
 import '../estilos/formularios.css'
 import getReceta from '../controller/recetas/getReceta';
+import redondear from '../utils/redondeo';
 
 function CrearReceta(props) {
 
@@ -252,7 +253,7 @@ function CrearReceta(props) {
                                                     {componentes.map(c => (
                                                     <tr key={c.ingrediente}>
                                                         <td>{c.ing.name}</td>
-                                                        <td>{c.cantidad}</td>
+                                                        <td>{redondear(c.cantidad)}</td>
                                                         <td>
                                                             <button onClick={()=>{eliminarIngrediente(c.ingrediente)}} className='btn-action delete'>Eliminar</button>
                                                         </td>
