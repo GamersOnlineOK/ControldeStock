@@ -10,7 +10,10 @@ const componentSchema = new mongoose.Schema({
   quantity: {
     type: Number,
     required: true,
-    min: 0
+    min: 0,
+    set: function(value) {
+      return Math.round(value * 10000) / 10000;
+    }
   },
   waste: {
     type: Number,

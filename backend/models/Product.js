@@ -9,7 +9,9 @@ const productSchema = new mongoose.Schema({
   unit: {    type: String,    required: true  },
   minStock: {    type: Number,    default: 0  },
   maxStock: {    type: Number,    default: 0  },
-  currentStock: {    type: Number,    default: 0  },
+  currentStock: {    type: Number,    default: 0 ,set: function(value) {
+      return Math.round(value * 10000) / 10000;
+    } },
   cost: {    type: Number,    default: 0  },
   price: {    type: Number,    default: 0  },
   category: {    type: mongoose.Schema.Types.ObjectId,    ref: 'Category',    required: true  },

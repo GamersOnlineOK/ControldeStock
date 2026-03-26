@@ -13,8 +13,8 @@ const createProduct = async (req, res) => {
       name,
       type,
       unit,
-      minStock:minStock / 1000,
-      currentStock:currentStock / 1000,
+      minStock:minStock,
+      currentStock:currentStock ,
       category,
       cost,
       price
@@ -195,10 +195,40 @@ const updateStockElaborada = async (req, res) => {
 //   }
 // };
 
+const stockCero = async (req, res) => {
+  try {
+    const products = await Product.find();
+    for (const product of products) {
+      const previousStock = product.currentStock;
+      product.currentStock = 0;
+      await product.save();
+      console.log(`Stock de ${product.name} puesto en cero. Stock anterior: ${previousStock}`);
+    }
+    res.send('Stock de todos los productos puesto en cero');
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+const getById = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ error: 'Producto no encontrado' });
+    }
+    res.json(product);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}; 
+
 export default {
   createProduct,
   getProducts,
   updateStock,
   getAllProducts,
-  updateStockElaborada
+  updateStockElaborada,
+  stockCero,
+  getById
 };
