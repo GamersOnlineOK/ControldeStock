@@ -31,7 +31,7 @@ function App() {
         <Route path="/productos/stock" element={<Productos />} />
         <Route path="/productos/crear-producto" element={<CrearProducto />} />
         <Route path="/productos/recetas/:Id" element={<CrearReceta />} />
-        {/* <Route path="/productos/editar/:id" element={<EditarProducto />} /> */}
+        <Route path="/productos/editar/:id" element={<EditarProducto />} />
         {/* ======= PEDIDOS ======== */}
         <Route path="/pedidos/crear-pedido" element={<PedidosCrear />} />
         <Route path="/pedidos/pedidos-completados" element={<PedidosCompletos />} />

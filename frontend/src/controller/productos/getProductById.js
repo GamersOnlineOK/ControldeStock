@@ -1,24 +1,23 @@
+
 import URL from '../../utils/apiUrl.js';
-const getAllProductos = async (req, res, type, active) => {
+const getProductById = async (id) => {
     try {
-        const response = await fetch(`${URL}products/`, {
+        const response = await fetch(`${URL}products/${id}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
-        }); 
-
+        });
         if (!response.ok) {
-            throw new Error('Error al obtener los productos');
+            throw new Error('Error al obtener el producto');
         }
         const data = await response.json();
         return data;
     }
     catch (error) {
-        console.error('Error en getProductos:', error);
-        return [];
+        console.error('Error en getProductById:', error);
+        return null;
     }
 };
 
-
-export default getAllProductos;
+export default getProductById;

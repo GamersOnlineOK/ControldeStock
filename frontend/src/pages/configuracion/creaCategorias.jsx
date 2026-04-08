@@ -3,10 +3,13 @@ import {
     useState,
     useEffect
 } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 function CreaCategorias(props) {
+    const navigate = useNavigate();
     const [categorias, setCategorias] = useState([]);
-
+    const [editingCategoria, setEditingCategoria] = useState({name: '', description: ''});
     useEffect(() => {
         fetch(`${URL}config/list`)
             .then(
@@ -39,6 +42,27 @@ function CreaCategorias(props) {
         .catch(error => console.error('Error creating category:', error));
     }
 
+    const editarCategoria = (categoria) => {
+        
+        fetch(`${URL}config/update/${categoria._id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(categoria)  
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log('Categoria actualizada:', result);
+            // Aquí podrías actualizar la lista de categorías o mostrar un mensaje de éxito
+            setCategorias(prevCategorias => prevCategorias.map(cat => cat._id === result._id ? result : cat));
+            //actualizar la pagina
+            setEditingCategoria(null);
+            navigate('/configuracion/categorias');
+        }
+        )
+        .catch(error => console.error('Error updating category:', error));
+    }
 
 
     return (
@@ -67,17 +91,44 @@ function CreaCategorias(props) {
                     <tr>
                         <th>Nombre</th>
                         <th>Descripción</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
-                {categorias.map((categoria) => (
-                    <tbody key={categoria._id}>
-                        <tr>
-                            <td>{categoria.name}</td>
-                            <td>{categoria.description}</td>
-                        </tr>
+                    <tbody >
+                        {categorias.map((categoria) => (
+                            <tr key={categoria._id}>
+                                <td>
+                                    <input type="text" id="nombre" name="nombre" required 
+                                    value={categoria.name}
+                                    onChange={(e) => {
+                                        const categoriasActualizadas = categorias.map(cat =>
+                                            cat._id === categoria._id
+                                                ? {...cat, name: e.target.value}
+                                                : cat
+                                        );
+                                        setCategorias(categoriasActualizadas);
+                                    }}
+                                    />
+                                </td>
+                                <td>
+                                    <input type="text" id="descripcion" name="descripcion" required 
+                                    value={categoria.description}
+                                    onChange={(e) => {
+                                        const categoriasActualizadas = categorias.map(cat =>
+                                            cat._id === categoria._id
+                                                ? {...cat, description: e.target.value}
+                                                : cat
+                                        );                                       
+                                        setCategorias(categoriasActualizadas);
+                                    }}
+                                    />
+                                </td>
+                                <td>
+                                    <button className="btn-action edit" onClick={() => editarCategoria(categoria)}>Guardar</button>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
-                    
-                ))}
                 </table>
         </div>
         </div>
