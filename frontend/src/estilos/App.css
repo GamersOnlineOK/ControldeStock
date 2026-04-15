@@ -48,7 +48,7 @@
 
 .orders-table th {
   background-color: #272727;
-  padding: 1rem;
+  padding: 0.5rem;
   text-align: left;
   font-weight: 600;
   color: #bdbdbd;
@@ -56,17 +56,17 @@
 }
 
 .orders-table td {
-  padding: 1rem;
+  padding: 0.3rem;
   border-bottom: 1px solid #e9ecef;
-  border-left: 1px solid #e9ecef;
+  /*border-left: 1px solid #e9ecef;*/
 }
 td {
-  max-width: 150px;
+  /*max-width: 150px;*/
   border-bottom: 1px solid #e9ecef;
 }
 
 .orders-table tr:hover {
-  background-color: #90d1f7;
+  background-color: #ebebeb;
 }
 /* table tr td:nth-child(5),
 table tr th:nth-child(5) {

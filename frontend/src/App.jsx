@@ -19,6 +19,7 @@ import PedidosVer from './pages/pedidos/PedidosVer';
 import CrearProveedores from './pages/configuracion/CrearProveedores';
 import CreaCategorias from './pages/configuracion/creaCategorias';
 import EditarProducto from './pages/productos/editarProducto';
+import BajaProducto from './pages/productos/bajaProducto';
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
         <Route path="/productos/crear-producto" element={<CrearProducto />} />
         <Route path="/productos/recetas/:Id" element={<CrearReceta />} />
         <Route path="/productos/editar/:id" element={<EditarProducto />} />
+        <Route path="/productos/baja/:id" element={<BajaProducto />} />
         {/* ======= PEDIDOS ======== */}
         <Route path="/pedidos/crear-pedido" element={<PedidosCrear />} />
         <Route path="/pedidos/pedidos-completados" element={<PedidosCompletos />} />

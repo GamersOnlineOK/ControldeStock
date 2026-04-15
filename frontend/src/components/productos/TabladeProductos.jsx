@@ -34,6 +34,9 @@ function TabladeProductos(producto) {
     const verEditar = (producto) =>{
       navigate(`/productos/editar/${producto._id}`)
     }
+    const crearBaja = (id) =>{
+      navigate(`/productos/baja/${id}`)
+    }
     // Función de filtrado combinado
     const filteredProducts = data.filter(producto => {
       const matchesSearch = producto.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -100,13 +103,12 @@ function TabladeProductos(producto) {
                   {producto.type === "MP" ? (
                     <button className="btn-action process" onClick={() => ModalStock.abrirModal(producto)}>Agregar Stock</button>
                     ):(
-                      <>
+                    <>
                       <button className="btn-action process" onClick={() => ModalStock.abrirModal(producto)}>Agregar Stock</button>
                       <button className="btn-action view" onClick={() => verReceta(producto)}>Crear Receta</button>
                       <button className="btn-action edit" onClick={() => verEditar(producto)}>Editar</button>
-                      <button className="btn-action delete " onClick={() => verReceta(producto)}>Deshabilitar</button>
+                      <button className="btn-action delete " onClick={() => crearBaja(producto._id)}>Baja</button>
                       </>
-
                       )}
                   
                 </td>
