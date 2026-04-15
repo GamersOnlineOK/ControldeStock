@@ -49,7 +49,6 @@ const getAllProducts = async (req, res) =>{
     res.status(500).json({ error: error.message });
   }
 }
-
 // Actualizar stock de materia prima (ENTRADA, SALIDA, AJUSTE_POSITIVO, AJUSTE_NEGATIVO, CONSUMO)
 const updateStock = async (req, res) => {
   try {
@@ -160,7 +159,48 @@ const updateStockElaborada = async (req, res) => {
       res.status(400).json({ error: error.message });
     }
   };
-// Agrega stock de productos finales y controla que tenga existencia de materia prima elaborada y materia prima a parti de la receta (BOM)
+
+const reduceStock= async (req, res) => {
+//esta funcion reduce el stock del producto final o materia prima elaborada o materia prima y crea un movimiento de stock.
+  try {
+    const { productId } = req.params;
+    const { quantity, type, reference, notes, user } = req.body;
+    console.log(req.body);
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ error: 'Producto no encontrado' });
+    }
+
+    const previousStock = product.currentStock;
+    let newStock = previousStock - quantity;
+
+    if (newStock < 0) {
+      return res.status(400).json({ error: 'Stock insuficiente' });
+    }
+
+    product.currentStock = newStock;
+    await product.save();
+
+    // Registrar movimiento de stock
+    const movement = new StockMovement({
+      product: productId,
+      type,
+      quantity,
+      reference,
+      notes,
+      previousStock,
+      newStock,
+      user
+    });
+    await movement.save();
+
+    res.json({ product, movement });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+    // Agrega stock de productos finales y controla que tenga existencia de materia prima elaborada y materia prima a parti de la receta (BOM)
 
 // const updateStockFinal = async (req, res) => {
 //   try {
@@ -221,7 +261,23 @@ const getById = async (req, res) => {
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
-}; 
+};
+
+const patchProductoByID = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const updatedData = req.body;
+
+    const product = await Product.findByIdAndUpdate(productId, updatedData, { new: true });
+    if (!product) {
+      return res.status(404).json({ error: 'Producto no encontrado' });
+    }
+    res.json(product);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
 
 export default {
   createProduct,
@@ -230,5 +286,7 @@ export default {
   getAllProducts,
   updateStockElaborada,
   stockCero,
-  getById
+  getById,
+  patchProductoByID,
+  reduceStock
 };
