@@ -18,7 +18,7 @@ function CrearReceta(props) {
     const [type, setType ] = useState('MP');
     const [componente, setComponente] = useState('');
     const [componentes,setComponentes] = useState([]);
-    const [base, setBase] = useState(0);
+    const [base, setBase] = useState(1);
     const active = true;
 
     useEffect(()=>{
@@ -128,6 +128,7 @@ function CrearReceta(props) {
                 return [...prevComponentes, componente];
             }
         });
+        log('Componente agregado o actualizado:', componente);
 
         event.target.reset();       
     }
