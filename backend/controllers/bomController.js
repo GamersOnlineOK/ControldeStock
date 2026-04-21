@@ -20,7 +20,7 @@ const createOrUpdateBOM = async (req, res) => {
     }
 
     // Verificar que los componentes existen y son del tipo correcto
-    for (let component of components) {
+    /*for (let component of components) {
       const compProduct = await Product.findById(component.product);
       if (!compProduct) {
         return res.status(404).json({ error: `Componente ${component.product} no encontrado` });
@@ -38,8 +38,25 @@ const createOrUpdateBOM = async (req, res) => {
           return res.status(400).json({ error: 'MPE solo puede contener MP' });
         }
       }
-    }
+    }*/
+    for (let component of components) {
+      const compProduct = await Product.findById(component.product);
+      if (!compProduct) {
+        return res.status(404).json({ error: `Componente ${component.product} no encontrado` });
+      }
 
+      // Validar tipos según nivel
+      if (product.type === 'PF') {
+        if (!['MP', 'MPE'].includes(compProduct.type)) {
+          return res.status(400).json({ error: 'PF solo puede contener MP o MPE' });
+        }
+      } else if (product.type === 'MPE') {
+        // Permitir que MPE contenga MP o MPE (ajusta según tu necesidad)
+        if (!['MP', 'MPE'].includes(compProduct.type)) {
+          return res.status(400).json({ error: 'MPE solo puede contener MP o MPE' });
+        }
+      }
+    }
     const bom = await BOM.findOneAndUpdate(
       { product: productId },
       { components, version, baseQuantity },
