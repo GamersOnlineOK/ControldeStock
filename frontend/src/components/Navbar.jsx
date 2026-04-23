@@ -71,6 +71,10 @@ function Navbar() {
                 <Link to="/productos/stock">📋 Stock de Productos
                 </Link>
               </li>
+              <li>
+                <Link to="/productos/movimientos"> Movimientos de Stock
+                </Link>
+              </li>
             </ul>
         </li>
         

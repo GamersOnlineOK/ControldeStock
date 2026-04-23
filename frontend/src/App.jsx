@@ -20,6 +20,7 @@ import CrearProveedores from './pages/configuracion/CrearProveedores';
 import CreaCategorias from './pages/configuracion/creaCategorias';
 import EditarProducto from './pages/productos/editarProducto';
 import BajaProducto from './pages/productos/bajaProducto';
+import Movimientos from './pages/productos/movimientos';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
         <Route path="/productos/recetas/:Id" element={<CrearReceta />} />
         <Route path="/productos/editar/:id" element={<EditarProducto />} />
         <Route path="/productos/baja/:id" element={<BajaProducto />} />
+        <Route path="/productos/movimientos" element={<Movimientos />} />
         {/* ======= PEDIDOS ======== */}
         <Route path="/pedidos/crear-pedido" element={<PedidosCrear />} />
         <Route path="/pedidos/pedidos-completados" element={<PedidosCompletos />} />
