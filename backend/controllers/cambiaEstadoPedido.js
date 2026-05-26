@@ -6,9 +6,6 @@ const cambiaEstadoPedido =  (estado) =>{
         status:estado.estado
     };
     const ordenId= estado.id;
-    console.log(data);
-    console.log(WooCommerce);
-    
     const estadoWoo = () =>{
        WooCommerce.put(`orders/${ordenId}`, data)
         .then((response) => {

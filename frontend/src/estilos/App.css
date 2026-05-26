@@ -168,6 +168,11 @@ table tr th:nth-child(5) {
   background-size: 18px;
 }
 
+.filter-objets input[type="date"] {
+  padding-left: 1rem;
+  background-image: none;
+}
+
 .filter-objets select {
   padding: 0.75rem 1rem;
   border: 2px solid #e2e8f0;
@@ -188,6 +193,20 @@ table tr th:nth-child(5) {
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
+
+.filter-actions {
+  justify-content: flex-end;
+}
+
+.filter-actions .btn-action {
+  width: 100%;
+  margin: 0;
+}
+
+.print-header {
+  display: none;
+}
+
 .page{
   background-color: rgb(238, 238, 238);
 }
@@ -208,5 +227,61 @@ table tr th:nth-child(5) {
   
   .filter-objets {
     min-width: auto;
+  }
+}
+
+@media print {
+  .navbar,
+  .no-print {
+    display: none !important;
+  }
+
+  .main-content,
+  .page {
+    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .print-header {
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .print-header h1 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.25rem;
+    color: #111827;
+  }
+
+  .print-header p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #374151;
+  }
+
+  .orders-table-container {
+    box-shadow: none;
+    border-radius: 0;
+    overflow: visible;
+    margin-top: 0;
+  }
+
+  .orders-table {
+    font-size: 0.72rem;
+  }
+
+  .orders-table th,
+  .orders-table td {
+    padding: 0.25rem;
+  }
+
+  .orders-table th {
+    background-color: #f3f4f6 !important;
+    color: #111827 !important;
+  }
+
+  .orders-table tr:hover {
+    background-color: transparent;
   }
 }

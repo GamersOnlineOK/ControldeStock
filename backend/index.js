@@ -6,17 +6,23 @@ import con from './config/mongo.js';
 import routes from './routes/index.js';
 const app = express();
 dotenv.config();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3200;
+const defaultOrigins = [
+  'https://simi-pry.com.ar',
+  'http://simi-pry.com.ar',
+  'https://www.simi-pry.com.ar',
+  'http://www.simi-pry.com.ar',
+  'http://localhost:3000',
+  'http://localhost:5173'
+];
+const allowedOrigins = (process.env.CORS_ORIGINS || defaultOrigins.join(','))
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 // Middleware
 app.use(cors({
-  origin: [
-    'https://simi-pry.com.ar',
-    'http://simi-pry.com.ar',
-    'https://www.simi-pry.com.ar',
-    'http://www.simi-pry.com.ar',
-    'http://localhost:3000'
-  ],
+  origin: allowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH','OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],

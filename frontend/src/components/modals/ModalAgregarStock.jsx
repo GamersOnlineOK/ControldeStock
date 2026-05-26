@@ -2,7 +2,6 @@ import { useModalStock } from "./modalProvider";
 import '../../estilos/modal.css'
 import patchStock from "../../controller/productos/patchStock";
 import { useState } from "react";
-import { set } from "mongoose";
 
 const ModalAgregarStock = () => {
   const {

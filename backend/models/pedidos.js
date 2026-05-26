@@ -10,7 +10,7 @@ const orderSchema = new mongoose.Schema({
     quantity: Number,
     subtotal:Number
   }],
-  notes:  {Type:String},
+  notes: { type: String },
   status: { type: String, default: 'Pendiente' },
   createdAt: { type: Date, default: Date.now },
   

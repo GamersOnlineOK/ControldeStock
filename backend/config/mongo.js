@@ -2,7 +2,9 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 dotenv.config();
 const con = async (app,PORT) =>{
-    console.log(process.env.MONGODB_URI);
+    if (!process.env.MONGODB_URI) {
+        throw new Error('Falta configurar MONGODB_URI');
+    }
     
     const coneccion = await mongoose.connect(process.env.MONGODB_URI, )
     .then(() => {

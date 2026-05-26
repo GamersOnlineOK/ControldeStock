@@ -128,7 +128,7 @@ function CrearReceta(props) {
                 return [...prevComponentes, componente];
             }
         });
-        log('Componente agregado o actualizado:', componente);
+        console.log('Componente agregado o actualizado:', componente);
 
         event.target.reset();       
     }
@@ -209,7 +209,7 @@ function CrearReceta(props) {
                                     name="ingrediente"
                                     onChange={handleComponent}
                                     >
-                                        <option selected> Selecciona un ingrediente </option>
+                                        <option value=""> Selecciona un ingrediente </option>
                                     {
                                             loading ? ("ok"):(
                                                 materiaprima.map((mp) => {

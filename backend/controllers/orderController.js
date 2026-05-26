@@ -6,6 +6,40 @@ import productController from './productionController.js';
 import WooCommerce from '../config/woocommerce.js';
 import cambiaEstadoPedido from './cambiaEstadoPedido.js';
 
+const findProductForOrderItem = async (productId) => {
+  if (!productId) return null;
+
+  const wooCommerceId = Number(productId);
+  if (Number.isFinite(wooCommerceId)) {
+    const productByWooId = await Product.findOne({ woocommerceId: wooCommerceId });
+    if (productByWooId) return productByWooId;
+  }
+
+  try {
+    return await Product.findById(productId);
+  } catch (error) {
+    return null;
+  }
+};
+
+const callControllerJson = async (controller, req) => {
+  return new Promise((resolve, reject) => {
+    const res = {
+      json: resolve,
+      status: (statusCode) => ({
+        json: (payload) => {
+          const error = new Error(payload?.error || 'Error en controlador');
+          error.statusCode = statusCode;
+          error.payload = payload;
+          reject(error);
+        }
+      })
+    };
+
+    Promise.resolve(controller(req, res)).catch(reject);
+  });
+};
+
 // Función para procesar un pedido completo
 const processOrder = async (req, res) => {
   try {
@@ -70,7 +104,7 @@ const processOrder = async (req, res) => {
         };
 
         // Ejecutar producción
-        await processProductionAuto(productionReq, productionRes);
+        await productController.processProductionAuto(productionReq, productionRes);
         
       } catch (error) {
         console.error(`Error produciendo ${item.productId}:`, error);
@@ -112,7 +146,7 @@ const processOrder = async (req, res) => {
 // Función auxiliar: Verificar stock para un item del pedido
 const checkStockForOrder = async (productId, quantity) => {
   try {
-    const product = await Product.findById(productId);
+    const product = await findProductForOrderItem(productId);
     if (!product) {
       return {
         productId,
@@ -124,10 +158,11 @@ const checkStockForOrder = async (productId, quantity) => {
     }
 
     // Usar la función existente checkStockAdvanced
-    const stockCheck = await productController.checkStockAdvanced({
-      body: { productId, quantity }
-    }, {
-      json: (result) => result
+    const stockCheck = await callControllerJson(productController.checkStockAdvanced, {
+      body: {
+        productId: product._id,
+        quantity
+      }
     });
 
     return {

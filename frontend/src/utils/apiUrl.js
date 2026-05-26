@@ -1,4 +1,9 @@
 const baseURL =()=> {
+    const envURL = import.meta.env.VITE_API_URL;
+    if (envURL) {
+      return envURL.endsWith('/') ? envURL : `${envURL}/`;
+    }
+
     if (typeof window !== 'undefined' && 
       !window.location.hostname.includes('localhost') &&
       !window.location.hostname.includes('127.0.0.1')) {

@@ -1,27 +1,26 @@
 // src/pages/Home.jsx
 import { useState, useEffect } from 'react'
 import getPedidos from '../controller/getPedidosPendientes';
-import  formatDate  from '../utils/formatDate';
-import enviarPedido from '../controller/pedidos/enviaProcesar';
 import { Link } from 'react-router-dom';
-import URL from '../utils/apiUrl';
 import getIncomingOrders from '../controller/pedidos/getIncomingOrders';
 
 function Home() {
   const [pedidos, setPedidos] = useState([])
   const [loading, setLoading] = useState(true)
-  console.log(URL);
   
   useEffect(() => {
-
     async function fetchPedidosPendientes() {
-      const pendingOrders = await getIncomingOrders();
-      if (pendingOrders) {
+      try {
+        await getIncomingOrders();
+      } catch (error) {
+        console.warn('No se pudieron sincronizar pedidos entrantes:', error);
+      } finally {
         const data = await getPedidos()
         setPedidos(data)
         setLoading(false)
       }
     }
+
     fetchPedidosPendientes()
   }, []);
 

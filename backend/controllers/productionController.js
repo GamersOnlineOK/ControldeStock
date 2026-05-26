@@ -3,6 +3,22 @@ import Product from '../models/Product.js';
 import BOM from '../models/BOM.js';
 import StockMovement from '../models/StockMovement.js';
 
+const findProductByAnyId = async (productId) => {
+  if (!productId) return null;
+
+  const wooCommerceId = Number(productId);
+  if (Number.isFinite(wooCommerceId)) {
+    const productByWooId = await Product.findOne({ woocommerceId: wooCommerceId });
+    if (productByWooId) return productByWooId;
+  }
+
+  try {
+    return await Product.findById(productId);
+  } catch (error) {
+    return null;
+  }
+};
+
 // Función auxiliar: Verificar stock de componentes directos
 const checkDirectComponentsStock = async (bom, quantity) => {
   let canUseDirect = true;
@@ -270,7 +286,7 @@ const processProductionAuto = async (req, res) => {
   
     console.log('Iniciando producción automática para:', productId, 'Cantidad:', quantity);
 
-    const product = await Product.findOne({ woocommerceId: productId });
+    const product = await findProductByAnyId(productId);
     // const product = await Product.findById(  productId );
     console.log('Producto encontrado:', product);
     if (!product || !['PF', 'MPE'].includes(product.type)) {
@@ -443,7 +459,7 @@ const processProductionMPE = async (req, res) => {
   
     console.log('Iniciando producción automática para:', productId, 'Cantidad:', quantity);
 
-    const product = await Product.findOne({ _id: productId });
+    const product = await findProductByAnyId(productId);
     // const product = await Product.findById(  productId );
     console.log('Producto encontrado:', product);
     if (!product || !['PF', 'MPE'].includes(product.type)) {
@@ -612,13 +628,13 @@ const checkStockAdvanced = async (req, res) => {
   try {
     const { productId, quantity } = req.body;
 
-    const product = await Product.findById(productId);
+    const product = await findProductByAnyId(productId);
     
     if (!product) {
       return res.status(404).json({ error: 'Producto no encontrado' });
     }
 
-    const bom = await BOM.findOne({ product: productId }).populate('components.product');
+    const bom = await BOM.findOne({ product: product._id }).populate('components.product');
     if (!bom) {
       return res.status(404).json({ error: 'BOM no encontrado' });
     }
@@ -627,7 +643,7 @@ const checkStockAdvanced = async (req, res) => {
     const { canUseDirect, missingComponents } = await checkDirectComponentsStock(bom, quantity);
     
     // Verificar modo explosión
-    const allComponents = await explodeComponents(productId, quantity);
+    const allComponents = await explodeComponents(product._id, quantity);
     const consolidatedComponents = consolidateComponents(allComponents);
     
     let canUseExplosion = true;
