@@ -5,11 +5,13 @@ import StockMovement from '../models/StockMovement.js';
 
 // Crear producto
 const createProduct = async (req, res) => {
-  const { code, name, type, unit, minStock, currentStock, category, cost, price } = req.body;
+  const { code, sku, name, type, unit, minStock, currentStock, category, cost, price } = req.body;
+  const normalizedSku = typeof sku === 'string' && sku.trim() ? sku.trim() : undefined;
 
   try {
     const product = new Product({
       code,
+      sku: normalizedSku,
       name,
       type,
       unit,
@@ -266,9 +268,25 @@ const getById = async (req, res) => {
 const patchProductoByID = async (req, res) => {
   try {
     const { productId } = req.params;
-    const updatedData = req.body;
+    const updatedData = { ...req.body };
+    const unsetData = {};
 
-    const product = await Product.findByIdAndUpdate(productId, updatedData, { new: true });
+    if ('sku' in updatedData) {
+      const normalizedSku = typeof updatedData.sku === 'string' ? updatedData.sku.trim() : updatedData.sku;
+
+      if (normalizedSku) {
+        updatedData.sku = normalizedSku;
+      } else {
+        delete updatedData.sku;
+        unsetData.sku = '';
+      }
+    }
+
+    const update = {};
+    if (Object.keys(updatedData).length > 0) update.$set = updatedData;
+    if (Object.keys(unsetData).length > 0) update.$unset = unsetData;
+
+    const product = await Product.findByIdAndUpdate(productId, update, { new: true, runValidators: true });
     if (!product) {
       return res.status(404).json({ error: 'Producto no encontrado' });
     }

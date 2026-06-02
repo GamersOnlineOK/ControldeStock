@@ -2,6 +2,9 @@
 import mongoose from 'mongoose';
 const productSchema = new mongoose.Schema({
   code: {    type: String,    required: true,    unique: true  },
+  sku: {    type: String,    unique: true,    sparse: true,    trim: true,    set: function(value) {
+      return value && value.trim() ? value.trim() : undefined;
+    } },
   woocommerceId: {    type: Number,    unique: true,    sparse: true  },
   name: {    type: String,    required: true  },
   description: String,  

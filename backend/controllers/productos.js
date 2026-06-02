@@ -15,6 +15,7 @@ const sincronizarProductosWoocommerce = async (req, res) => {
         status: 'publish',
         _fields: [
           'id',
+          'sku',
           'name',
           'description',
           'price',
@@ -41,6 +42,7 @@ const sincronizarProductosWoocommerce = async (req, res) => {
       const batchResults = await Promise.all(
         batch.map(async (product) => {
           try {
+            const normalizedSku = product.sku?.trim();
             const categoryName = product.categories?.[0]?.name || 'Sin categoria';
             const category = await Category.findOneAndUpdate(
               { name: categoryName },
@@ -59,9 +61,12 @@ const sincronizarProductosWoocommerce = async (req, res) => {
               category: category._id,
               isActive: product.status === 'publish'
             };
+            if (normalizedSku) productData.sku = normalizedSku;
 
             const savedProduct = await Product.findOneAndUpdate(
-              { woocommerceId: product.id },
+              normalizedSku
+                ? { $or: [{ woocommerceId: product.id }, { sku: normalizedSku }] }
+                : { woocommerceId: product.id },
               {
                 $set: productData,
                 $setOnInsert: {

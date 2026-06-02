@@ -18,6 +18,7 @@ function CrearProducto(props) {
     
   const [formData, setFormData] = useState({
     code: '',
+    sku: '',
     name: '',
     type: 'PF',
     unit: '',
@@ -43,6 +44,7 @@ function CrearProducto(props) {
         setMessage('Producto creado exitosamente: ' + `${formData.name}`);
         setFormData({
           code: '', 
+          sku: '',
           name: '',
           type: 'PF',
           unit: '', 
@@ -62,6 +64,7 @@ function CrearProducto(props) {
   const handleReset = () => {
     setFormData({
       code: '',
+      sku: '',
       name: '',
       type: 'PF',
       unit: '',
@@ -110,6 +113,17 @@ function CrearProducto(props) {
                 onChange={handleChange}
                 placeholder="Ej: PROD-001"
                 required
+                />
+            </div>
+            <div className="form-group">
+                <label htmlFor="sku">SKU WooCommerce</label>
+                <input
+                type="text"
+                id="sku"
+                name="sku"
+                value={formData.sku}
+                onChange={handleChange}
+                placeholder="Ej: WOO-001"
                 />
             </div>
             {/* Nombre del Producto */}

@@ -45,6 +45,7 @@ function editarProducto() {
         setMessage('Producto actualizado exitosamente: ' + `${formData.name}`);
         setFormData({
           code: '', 
+          sku: '',
           name: '',
           type: 'PF',
           unit: '', 
@@ -66,6 +67,7 @@ function editarProducto() {
   const handleReset = () => {
     setFormData({
       code: '',
+      sku: '',
       name: '',
       type: 'PF',
       unit: '',
@@ -116,6 +118,17 @@ function editarProducto() {
                 onChange={handleChange}
                 placeholder="Ej: PROD-001"
                 required
+                />
+            </div>
+            <div className="form-group">
+                <label htmlFor="sku">SKU WooCommerce</label>
+                <input
+                type="text"
+                id="sku"
+                name="sku"
+                value={formData.sku || ''}
+                onChange={handleChange}
+                placeholder="Ej: WOO-001"
                 />
             </div>
             {/* Nombre del Producto */}
