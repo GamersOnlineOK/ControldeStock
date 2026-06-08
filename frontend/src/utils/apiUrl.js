@@ -7,7 +7,7 @@ const baseURL = () => {
   if (typeof window !== 'undefined' &&
     !window.location.hostname.includes('localhost') &&
     !window.location.hostname.includes('127.0.0.1')) {
-    return '/api/';
+    return 'https://simi-pry.com.ar:3200/api/';
   }
 
   return 'http://localhost:3200/api/';
