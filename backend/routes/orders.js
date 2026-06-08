@@ -18,6 +18,9 @@ router.get('/incoming', productController.processIncomingOrders);
 // sincroniza pedidos completos de WooCommerce
 router.get('/sync-completed', productController.syncCompletedOrders);
 
+// Obtener resumen liviano para dashboard
+router.get('/summary', productController.getOrdersSummary);
+
 // Obtener pedidos pendientes
 router.get('/pendientes', productController.getPedidosPendientes);
 

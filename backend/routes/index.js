@@ -9,8 +9,12 @@ import orderRoutes from './orders.js';
 import configRoutes from './config.js';
 import utilidadesRoutes from './utilidades.js';
 import stockMovementRoutes from './stockMovements-Route.js';
+import authRoutes from './auth.js';
+import userRoutes from './user.js';
 
 
+router.use('/auth', authRoutes);
+router.use('/users', userRoutes);
 router.use('/config', configRoutes);
 router.use('/products', productRoutes);
 router.use('/bom', bomRoutes);

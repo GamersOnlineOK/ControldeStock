@@ -2,7 +2,7 @@ import URL from "../../utils/apiUrl"
 
 const getIncomingOrders = async () => {
     try {
-        const response = await fetch(`${URL}orders/incoming`, {
+        const response = await fetch(`${URL}orders/incoming?compact=true`, {
             method: 'GET',
             headers: {  
                 'Content-Type': 'application/json'

@@ -356,6 +356,7 @@ const processSingleItem = async (orderNumber, item, user) => {
 const processIncomingOrders = async (req, res) => {
 
   try {
+    const compact = req.query.compact === 'true';
     const { data: orders } = await WooCommerce.get('orders', {
       per_page: 100, // Reducir temporalmente para pruebas
       _fields: ['id', 'billing', 'line_items', 'date_created','customer_note','status'].join(','),
@@ -411,7 +412,8 @@ const processIncomingOrders = async (req, res) => {
     res.json({
       success: true,
       message: `${savedOrders.length} pedidos guardados correctamente.`,
-      orders: savedOrders,
+      savedCount: savedOrders.length,
+      ...(compact ? {} : { orders: savedOrders }),
     });
   } catch (error) {
     console.error('Error en el endpoint /pedidos/incoming:', error);
@@ -421,6 +423,68 @@ const processIncomingOrders = async (req, res) => {
     });
   }
 }
+
+const getOrdersSummary = async (req, res) => {
+  try {
+    const [summary] = await Order.aggregate([
+      {
+        $project: {
+          status: 1,
+          createdAt: 1,
+          orderTotal: {
+            $sum: {
+              $map: {
+                input: { $ifNull: ['$items', []] },
+                as: 'item',
+                in: {
+                  $multiply: [
+                    { $ifNull: ['$$item.subtotal', 0] },
+                    { $ifNull: ['$$item.quantity', 0] },
+                  ],
+                },
+              },
+            },
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalPedidos: { $sum: 1 },
+          pendientes: {
+            $sum: { $cond: [{ $eq: ['$status', 'Pendiente'] }, 1, 0] },
+          },
+          completados: {
+            $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] },
+          },
+          totalVentas: { $sum: '$orderTotal' },
+          ultimaActualizacion: { $max: '$createdAt' },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          totalPedidos: 1,
+          pendientes: 1,
+          completados: 1,
+          totalVentas: 1,
+          ultimaActualizacion: 1,
+        },
+      },
+    ]);
+
+    res.json(summary || {
+      totalPedidos: 0,
+      pendientes: 0,
+      completados: 0,
+      totalVentas: 0,
+      ultimaActualizacion: null,
+    });
+  } catch (error) {
+    console.error('Error al obtener resumen de pedidos:', error);
+    res.status(500).json({ error: 'Error al obtener resumen de pedidos' });
+  }
+};
 
 const getAllOrders = async (req, res) => {
   try {
@@ -552,6 +616,7 @@ export default{
   processOrderSequential,
   checkOrderStock,
   processIncomingOrders,
+  getOrdersSummary,
   getAllOrders,
   getPedidosPendientes,
   getPedidosCompletados,

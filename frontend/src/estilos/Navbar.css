@@ -87,3 +87,40 @@
 .dropdown-menu li:last-child a {
   border-bottom: none;
 }
+
+.nav-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25em;
+  margin-right: 0.35rem;
+  line-height: 1;
+}
+
+.nav-brand .nav-icon {
+  margin-right: 0;
+}
+
+.nav-session {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.9rem;
+}
+
+.nav-session small {
+  color: #cbd5e1;
+}
+
+.nav-session button {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: transparent;
+  color: white;
+  border-radius: 4px;
+  padding: 0.45rem 0.7rem;
+  cursor: pointer;
+}
+
+.nav-session button:hover {
+  background: #34495e;
+}
