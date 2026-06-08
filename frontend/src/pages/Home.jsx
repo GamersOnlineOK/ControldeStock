@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import getIncomingOrders from '../controller/pedidos/getIncomingOrders'
 import getOrdersSummary from '../controller/pedidos/getOrdersSummary'
@@ -17,6 +17,8 @@ function Home() {
   const [loading, setLoading] = useState(true)
   const [syncing, setSyncing] = useState(false)
   const [syncError, setSyncError] = useState('')
+  const didStartInitialSync = useRef(false)
+  const isSyncing = useRef(false)
 
   const fetchSummary = useCallback(async ({ showLoading = false } = {}) => {
     if (showLoading) setLoading(true)
@@ -36,6 +38,9 @@ function Home() {
   }, [])
 
   const syncOrders = useCallback(async () => {
+    if (isSyncing.current) return
+
+    isSyncing.current = true
     setSyncing(true)
     setSyncError('')
 
@@ -45,11 +50,15 @@ function Home() {
     } catch (error) {
       setSyncError('No se pudieron sincronizar pedidos de WooCommerce')
     } finally {
+      isSyncing.current = false
       setSyncing(false)
     }
   }, [fetchSummary])
 
   useEffect(() => {
+    if (didStartInitialSync.current) return
+
+    didStartInitialSync.current = true
     fetchSummary({ showLoading: true })
     syncOrders()
   }, [fetchSummary, syncOrders])
