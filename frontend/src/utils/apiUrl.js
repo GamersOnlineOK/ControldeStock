@@ -1,19 +1,33 @@
-const baseURL =()=> {
-    const envURL = import.meta.env.VITE_API_URL;
-    if (envURL) {
-      return envURL.endsWith('/') ? envURL : `${envURL}/`;
-    }
+const normalizeURL = (url) => (url.endsWith('/') ? url : `${url}/`);
 
-    if (typeof window !== 'undefined' && 
-      !window.location.hostname.includes('localhost') &&
-      !window.location.hostname.includes('127.0.0.1')) {
+const isLocalHostname = (hostname) => (
+  hostname === 'localhost' ||
+  hostname === '127.0.0.1' ||
+  hostname === '::1'
+);
+
+const isLocalApiURL = (url) => /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\//.test(url);
+
+const baseURL = () => {
+  const envURL = import.meta.env.VITE_API_URL;
+
+  if (typeof window === 'undefined') {
+    return normalizeURL(envURL || 'http://localhost:3201/api/');
+  }
+
+  const isLocalBrowser = isLocalHostname(window.location.hostname);
+
+  if (envURL && (isLocalBrowser || !isLocalApiURL(envURL))) {
+    return normalizeURL(envURL);
+  }
+
+  if (!isLocalBrowser) {
     return '/api/';
   }
+
   return 'http://localhost:3201/api/';
-}
-const URLJSON = {
-  baseURL: baseURL()
-}
-const URL = URLJSON.baseURL;
+};
+
+const URL = baseURL();
 
 export default URL;
