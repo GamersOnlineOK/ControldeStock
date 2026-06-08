@@ -1,7 +1,5 @@
 import WooCommerceRestApi from '@woocommerce/woocommerce-rest-api';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import './env.js';
 
 const requiredConfig = [
   'WOOCOMMERCE_URL',

@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+import './env.js';
 import { seedSuperAdmin } from './seedSuperAdmin.js';
-dotenv.config();
 const con = async (app,PORT) =>{
     if (!process.env.MONGODB_URI) {
         throw new Error('Falta configurar MONGODB_URI');

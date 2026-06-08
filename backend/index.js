@@ -1,11 +1,10 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import dotenv from 'dotenv';
+import './config/env.js';
 import con from './config/mongo.js';
 import routes from './routes/index.js';
 const app = express();
-dotenv.config();
 const PORT = process.env.PORT || 3200;
 const defaultOrigins = [
   'https://simi-pry.com.ar',
