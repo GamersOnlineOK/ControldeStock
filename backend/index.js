@@ -6,7 +6,7 @@ import con from './config/mongo.js';
 import routes from './routes/index.js';
 const app = express();
 dotenv.config();
-const PORT = process.env.PORT || 3201;
+const PORT = process.env.PORT || 3200;
 const defaultOrigins = [
   'https://simi-pry.com.ar',
   'http://simi-pry.com.ar',
