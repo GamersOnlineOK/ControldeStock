@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import URL from '../utils/apiUrl';
+import readApiResponse from '../utils/readApiResponse';
 
 const AuthContext = createContext(null);
 const STORAGE_KEY = 'panificadora_auth';
@@ -51,7 +52,7 @@ export function AuthProvider({ children }) {
           return;
         }
 
-        const session = await response.json();
+        const session = await readApiResponse(response);
         const nextSession = {
           token,
           user: session.user,
@@ -77,7 +78,7 @@ export function AuthProvider({ children }) {
       body: JSON.stringify({ email, password }),
     });
 
-    const data = await response.json();
+    const data = await readApiResponse(response);
     if (!response.ok) {
       throw new Error(data.error || 'No se pudo iniciar sesion');
     }
