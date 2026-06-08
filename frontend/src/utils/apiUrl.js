@@ -15,7 +15,7 @@ const getSafeApiURL = (url) => {
   const isLocalApi = isLocalHostname(parsedURL.hostname);
 
   if (window.location.protocol === 'https:' && parsedURL.protocol === 'http:' && !isLocalApi) {
-    parsedURL.protocol = 'https:';
+    return '/api/';
   }
 
   return normalizeURL(parsedURL.toString());
@@ -29,7 +29,7 @@ const baseURL = () => {
 
   if (typeof window !== 'undefined' &&
     !isLocalHostname(window.location.hostname)) {
-    return 'https://simi-pry.com.ar:3200/api/';
+    return '/api/';
   }
 
   return 'http://localhost:3200/api/';
