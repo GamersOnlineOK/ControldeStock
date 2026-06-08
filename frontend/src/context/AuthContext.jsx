@@ -72,6 +72,8 @@ export function AuthProvider({ children }) {
   }, [token]);
 
   const login = async ({ email, password }) => {
+    console.log(URL);
+    
     const response = await fetch(`${URL}auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
